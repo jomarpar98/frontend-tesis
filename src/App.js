@@ -1,24 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { ThemeProvider as ThemeMaterial} from '@mui/material/styles';
+import styled, {ThemeProvider as ThemeStyled} from "styled-components";
+import Router from "./routers/Router";
+import theme from './styles/theme';
+import PruebasUsabilidad from "./pages/PruebasUsabilidad";
 
-function App() {
+const App = () => {
+
+  const ScrollBarContent=styled.div`
+    @media (min-width: 500px) {
+      max-height: 100vh;
+      ::-webkit-scrollbar {
+        width: 9px;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        border-radius: 3px;
+        background: #aaa;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #666;
+      }
+
+      overflow: auto;
+    }
+  `
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ScrollBarContent >
+      <ThemeMaterial theme = {theme}>
+        <ThemeStyled theme = {theme}>
+          <Router/>
+        </ThemeStyled>
+      </ThemeMaterial>
+    </ScrollBarContent>
   );
 }
 
