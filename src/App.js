@@ -4,6 +4,7 @@ import styled, {ThemeProvider as ThemeStyled} from "styled-components";
 import Router from "./routers/Router";
 import theme from './styles/theme';
 import PruebasUsabilidad from "./pages/PruebasUsabilidad";
+import {UserProvider} from "./context/UserContext";
 
 const App = () => {
 
@@ -31,7 +32,9 @@ const App = () => {
     <ScrollBarContent >
       <ThemeMaterial theme = {theme}>
         <ThemeStyled theme = {theme}>
-          <Router/>
+          <UserProvider>
+            <Router/>
+          </UserProvider>
         </ThemeStyled>
       </ThemeMaterial>
     </ScrollBarContent>
