@@ -62,16 +62,10 @@ const Router = () => {
 
   axios.interceptors.response.use(
     (res) => {
-      //  if (res.status === 201) {
-      //     console.log('Posted Successfully');
-      //  }
-      // console.log(res)
       return res;
     },
     (err) => {
-      // console.log(err.response)
       if (err.response.status === 401) {
-        // console.log('logout')
         signOut()
       }
       return Promise.reject(err);
