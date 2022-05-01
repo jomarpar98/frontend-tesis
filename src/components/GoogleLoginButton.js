@@ -44,6 +44,8 @@ function GoogleLoginButton (props) {
           }else{
             axios.defaults.headers.common['Authorization'] = `Bearer ${response.accessToken}`;
             result.data.accessToken = response.accessToken
+            result.data.imageUrl = response.profileObj.imageUrl
+            console.log(result.data)
             setUser(
               result.data
             )

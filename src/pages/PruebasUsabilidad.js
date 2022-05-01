@@ -20,17 +20,6 @@ import {
 } from "../services/PruebasUsabilidadService";
 import {useHistory} from "react-router-dom";
 
-let prueba = {
-  nombre: "ejemplo",
-  software: "pruebasis.com",
-  creacion: format(new Date(),"dd/MM/yyyy"),
-  responsable: "juan",
-  enlace: 'a.com'
-}
-let arr = [];
-arr.push(prueba);
-arr.push(prueba);
-
 const PruebasUsabilidad = () => {
 
   const[pruebas,setPruebas] = useState([]);
@@ -40,6 +29,7 @@ const PruebasUsabilidad = () => {
   const[esNuevo,setEsNuevo] = useState(true);
   const[disable,setDisable] = useState(false);
   const[openNuevaPrueba,setOpenNuevaPrueba] = useState(false);
+  const [recordsFiltered, setRecordsFiltered] = useState([]);
   const history = useHistory();
 
   const {user} = useContext(UserContext);
@@ -100,9 +90,20 @@ const PruebasUsabilidad = () => {
     });
   }
 
+  const handleSearch = e => {
+    let value = e.target.value.toLowerCase();
+    let filtered
+    if (value === "")
+      filtered = pruebas;
+    else
+      filtered = pruebas.filter(x => `${x.nombre}`.toLowerCase().includes(value))
+    setRecordsFiltered(filtered)
+  }
+
 
   useEffect(()=>{
     getPruebasUsabilidad(user,setPruebas)
+    getPruebasUsabilidad(user,setRecordsFiltered)
   },[])
   return (
     <Grid width={'80%'} m="auto" sx={{mt: 5}}>
@@ -113,6 +114,7 @@ const PruebasUsabilidad = () => {
             variant="outlined"
             placeholder="Buscar por nombre"
             InputProps={{ startAdornment:  ( <InputAdornment position="start"> <Search /> </InputAdornment> )}}
+            onChange={handleSearch}
           />
         </Grid>
         <Grid item xs={2} sx={{textAlign: 'end'}}>
@@ -120,7 +122,7 @@ const PruebasUsabilidad = () => {
         </Grid>
       </Grid>
       <Grid container justifyContent='space-between' sx={{marginTop: '30px', marginBottom: '10px',backgroundColor: theme.palette.fondo,borderRadius: '15px', padding: '20px'}}>
-        {pruebas.map((prueba,i) =>
+        {recordsFiltered.map((prueba,i) =>
           <Grid container xs={12} sx={{marginTop: '10px', marginBottom: '10px',backgroundColor: theme.palette.primary.dark, padding: '20px', borderRadius: '15px'}}>
             <Grid item xs={9}>
               <LabelTesis fontSize="20px" fontWeight="bold">{prueba.nombre}</LabelTesis>
@@ -151,6 +153,10 @@ const PruebasUsabilidad = () => {
             </Grid>
           </Grid>
         )}
+        {recordsFiltered.length === 0 &&
+        <Grid container xs={12} sx={{marginTop: '10px', marginBottom: '10px',backgroundColor: theme.palette.primary.dark, padding: '20px', borderRadius: '15px',justifyContent: 'center'}}>
+          <LabelTesis fontSize="30px" fontWeight="bold">No se encuentra ninguna prueba</LabelTesis>
+        </Grid>}
       </Grid>
       <DialogTesis onHide={handleCloseNuevaPrueba} visible={openNuevaPrueba} title={esNuevo ? "Nueva prueba de usabilidad" : "Editar prueba de usabilidad"}>
         <Grid container>

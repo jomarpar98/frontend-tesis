@@ -15,6 +15,10 @@ import {useContext, useState} from "react";
 import {UserContext} from "../context/UserContext";
 import {useGoogleLogout} from "react-google-login";
 import GOOGLE_CLIENT_ID from "../constants/GoogleClientId.constant";
+import Navbar from "../components/Navbar";
+import * as PropTypes from "prop-types";
+import TabsNavigation from "../components/TabsNavigation";
+import UsuariosSistema from "../pages/UsuariosSistema";
 
 (function() {
   const localUser = JSON.parse(localStorage.getItem('user'))
@@ -31,13 +35,14 @@ const Root = styled('div')(({ theme }) => ({
   },
 }));
 
+TabsNavigation.propTypes = {selection: PropTypes.string};
 const Router = () => {
   const theme = useTheme();
   const hidden = useMediaQuery(theme.breakpoints.down('lg'));
   const [selection, setSelection] = useState("");
 
   const history = useHistory()
-  const { setUser } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
 
   const onLogoutSuccess = () => {
     axios.defaults.headers.common['Authorization'] = null
@@ -75,10 +80,14 @@ const Router = () => {
 
   return(
     <BrowserRouter>
+      <Navbar setSelection={setSelection}/>
+      {hidden && <>
+        <TabsNavigation selection={selection}/>
+      </>}
       <Switch>
         <Route>
           <Root>
-            <Route exact path="/" render={() => <Redirect to="/pruebasUsabilidad"/>}/>
+            <Route exact path="/" render={() => user.idRol === 2 ? <Redirect to="/usuariosSistema"/> : <Redirect to="/pruebasUsabilidad"/>}/>
             <Route exact path="/login" component={Login}/>
             <Route exact path="/pruebasUsabilidad" component={PruebasUsabilidad}  />
             <Route exact path="/visualizar-prueba-usabilidad" component={OpcionesPruebaUsabilidad}  />
@@ -87,6 +96,7 @@ const Router = () => {
             <Route exact path="/cuestionarios" component={Cuestionarios}  />
             <Route exact path="/tareas" component={Tareas}  />
             <Route exact path="/entrevista" component={Entrevista}  />
+            <Route exact path="/usuariosSistema" component={UsuariosSistema}  />
           </Root>
         </Route>
         <Route render={() => <Redirect to="/pruebasUsabilidad"/>}/>
