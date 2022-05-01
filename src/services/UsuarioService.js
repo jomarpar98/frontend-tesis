@@ -3,7 +3,6 @@ import url from "../Config.js";
 import ROLES from "../constants/Roles.constant";
 
 export async function getUsuarios(setUsuarios,setRecordsFiltered) {
-
   let usuarios = await axios.get(`${url}usuario`)
   let usuariosFiltrados = usuarios.data.filter((u)=>{return u.idRol !== 3})
   let usuariosFinal = usuariosFiltrados.map((u)=>{
