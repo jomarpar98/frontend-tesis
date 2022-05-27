@@ -11,7 +11,7 @@ const DataGridTesis = (props) => {
   }
 
   return (
-    <div style={{ height: 600, width: '100%' }}>
+    <div style={{height: 330, width: '100%' }}>
       <DataGrid
         className={classes.root}
         pageSize={20}

@@ -25,7 +25,7 @@ import {
   updateParticipantes
 } from "../services/ParticipanteService";
 
-const Participantes = () =>{
+const ObservacionesRealizadas = () =>{
   const theme = useTheme()
   const history = useHistory()
   const {pruebaUsabilidad} = useContext(PruebaUsabilidadContext)
@@ -60,7 +60,7 @@ const Participantes = () =>{
   },[fetchPerfiles])
 
   const handleClickRegresar = () =>{
-    history.push("/visualizar-prueba-usabilidad");
+    history.push("/analisis-prueba-usabilidad");
   }
 
   const handleClosePerfiles = () =>{
@@ -219,14 +219,6 @@ const Participantes = () =>{
           <Typography sx={{ fontWeight: '700', fontSize: '2.25rem',margin:2}}>Participantes</Typography>
         </Grid>
       </Grid>
-      <Grid container xs={12}>
-        <Grid item xs={6}>
-          <ButtonTesis label="Agregar participante" onClick={()=>handleOpenNuevoParticipante(true)} variant="contained" endIcon={<AddIcon/>}/>
-        </Grid>
-        <Grid item xs={6} sx={{textAlign: 'end'}}>
-          <ButtonTesis label="Perfiles" onClick={handleOpenPerfiles} variant="contained" endIcon={<PersonIcon/>}/>
-        </Grid>
-      </Grid>
       <Grid xs={12} sx={{pt: 3}}>
         <DataGridTesis
           rows={participantes}
@@ -236,129 +228,9 @@ const Participantes = () =>{
           disableColumnMenu
         />
       </Grid>
-      <DialogTesis onHide={handleClosePerfiles} visible={openPerfiles} title={"Perfiles"}>
-        <Grid container>
-          <Grid item xs={5}>
-            <TexfieldTesis
-              variant="outlined"
-              placeholder="Buscar por nombre"
-              InputProps={{ startAdornment:  ( <InputAdornment position="start"> <Search /> </InputAdornment> )}}
-              onChange={handleSearch}
-            />
-          </Grid>
-          <Grid item xs={7} sx={{textAlign: 'end',alignSelf:'center'}}>
-            <ButtonTesis label="Agregar" variant="contained" onClick={()=>handleOpenNuevoPerfil(true)} endIcon={<AddIcon/>} />
-          </Grid>
-        </Grid>
-        <Grid xs={12} sx={{pt: 3}}>
-          <DataGridTesis
-            rows={ recordsFiltered.length!==0 ? recordsFiltered :[{
-              perfil: 'Alumnos de la PUCP',
-              cantidadParticipantes: 1,
-              idPerfilParticipante: 1,
-              id: 1
-            },
-              {
-                perfil: 'Alumnos de la UPC',
-                cantidadParticipantes: 0,
-                idPerfilParticipante: 2,
-                id: 2
-              }
-            ]}
-            columns={ColumnsPerfiles(handleOpenNuevoPerfil,handleDeletePerfil)}
-            pageSize={5}
-            disableSelectionOnClick
-            disableColumnSelector
-            disableColumnFilter
-            disableColumnMenu
-          />
-        </Grid>
-      </DialogTesis>
-      <DialogTesis onHide={handleCloseNuevoPerfil} visible={openNuevoPerfil} title={esNuevoPerfil ? "Nuevo perfil" : "Editar perfil"}>
-        <Grid container>
-          <Grid item xs={6} sx={{marginTop: '10px', marginBottom: '10px', alignSelf: 'center'}}>
-            <LabelTesis>Nombre</LabelTesis>
-          </Grid>
-          <Grid item xs={6} sx={{marginTop: '10px', marginBottom: '10px', alignSelf: 'center'}}>
-            <TexfieldTesis  variant="outlined" sx={{width:'100%'}} defaultValue={nombrePerfil} onBlur={handleNombrePerfilChange}/>
-          </Grid>
-        </Grid>
-        <Grid container sx={{marginTop:'10px'}}>
-          <Grid item xs={9}>
-            <ButtonTesis label="Cancelar" onClick={handleCloseNuevoPerfil} sx={{outline:"auto"}} />
-          </Grid>
-          <Grid item xs={3} sx={{textAlign: 'end'}}>
-            <ButtonTesis label="Guardar" onClick={handleGuardarPerfil} variant="contained" endIcon={<SaveIcon/>}/>
-          </Grid>
-        </Grid>
-      </DialogTesis>
-      <DialogTesis onHide={handleCloseNuevoParticipante} visible={openNuevoParticipante} title={esNuevoParticipante ? "Nuevo participante" : "Editar participante"}>
-        <Grid container>
-          <Grid item xs={6} sx={{marginTop: '10px', marginBottom: '10px', alignSelf: 'center'}}>
-            <LabelTesis>Nombre</LabelTesis>
-          </Grid>
-          <Grid item xs={6} sx={{marginTop: '10px', marginBottom: '10px', alignSelf: 'center'}}>
-            <TexfieldTesis  variant="outlined" sx={{width:'100%'}} defaultValue={nombreParticipante} onBlur={handleNombreParticipanteChange}/>
-          </Grid>
-          <Grid item xs={6} sx={{marginTop: '10px', marginBottom: '10px', alignSelf: 'center'}}>
-            <LabelTesis>Apellido parterno</LabelTesis>
-          </Grid>
-          <Grid item xs={6} sx={{marginTop: '10px', marginBottom: '10px', alignSelf: 'center'}}>
-            <TexfieldTesis  variant="outlined" sx={{width:'100%'}} defaultValue={apPaterno} onBlur={handleApPaternoChange}/>
-          </Grid>
-          <Grid item xs={6} sx={{marginTop: '10px', marginBottom: '10px', alignSelf: 'center'}}>
-            <LabelTesis>Apellido materno</LabelTesis>
-          </Grid>
-          <Grid item xs={6} sx={{marginTop: '10px', marginBottom: '10px', alignSelf: 'center'}}>
-            <TexfieldTesis  variant="outlined" sx={{width:'100%'}} defaultValue={apMaterno} onBlur={handleApMaternoChange}/>
-          </Grid>
-          <Grid item xs={6} sx={{marginTop: '10px', marginBottom: '10px', alignSelf: 'center'}}>
-            <LabelTesis>Email</LabelTesis>
-          </Grid>
-          <Grid item xs={6} sx={{marginTop: '10px', marginBottom: '10px', alignSelf: 'center'}}>
-            <TexfieldTesis  variant="outlined" sx={{width:'100%'}} defaultValue={email} onBlur={handleEmailChange}/>
-          </Grid>
-          <Grid item xs={6} sx={{marginTop: '10px', marginBottom: '10px', alignSelf: 'center'}}>
-            <LabelTesis>Perfil</LabelTesis>
-          </Grid>
-          <Grid item xs={6} sx={{marginTop: '10px', marginBottom: '10px', alignSelf: 'center'}}>
-            <Select
-              variant="outlined"
-              defaultValue={perfilSeleccionado}
-              onChange={handleSelection}
-              sx={{width:'100%'}}
-            >
-              {perfiles.length === 0 && <MenuItem key={1} value={"noPerfiles"}>No hay perfiles</MenuItem>}
-              {perfiles.map(perfil => (<MenuItem key={perfil.idPerfilParticipante} value={perfil.idPerfilParticipante}>{perfil.perfil}</MenuItem>))}
-            </Select>
-          </Grid>
-          <Grid item xs={6} sx={{marginTop: '10px', marginBottom: '10px', alignSelf: 'center'}}>
-            <LabelTesis>Observador</LabelTesis>
-          </Grid>
-          <Grid item xs={6} sx={{marginTop: '10px', marginBottom: '10px', alignSelf: 'center'}}>
-            <Select
-              variant="outlined"
-              defaultValue={observadorSeleccionado}
-              onChange={handleSelectionObservador}
-              sx={{width:'100%'}}
-            >
-              {observadores.length === 0 && <MenuItem key={1} value={"noObservador"}>No hay observadores</MenuItem>}
-              {observadores.map(observador => (<MenuItem key={observador.idUsuario} value={observador.idUsuario}>{`${observador.Usuario.nombre} ${observador.Usuario.apPaterno} ${observador.Usuario.apMaterno}`}</MenuItem>))}
-            </Select>
-          </Grid>
-        </Grid>
-        <Grid container sx={{marginTop:'10px'}}>
-          <Grid item xs={9}>
-            <ButtonTesis label="Cancelar" onClick={handleCloseNuevoParticipante} sx={{outline:"auto"}} />
-          </Grid>
-          <Grid item xs={3} sx={{textAlign: 'end'}}>
-            <ButtonTesis label="Guardar" onClick={handleGuardarParticipante} variant="contained" endIcon={<SaveIcon/>}/>
-          </Grid>
-        </Grid>
-      </DialogTesis>
     </Grid>
   )
 
 }
 
-export default Participantes
+export default ObservacionesRealizadas

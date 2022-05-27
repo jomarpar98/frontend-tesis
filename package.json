@@ -14,8 +14,17 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
+    "@typescript-eslint/eslint-plugin": "2.x",
+    "@typescript-eslint/parser": "2.x",
     "axios": "^0.26.1",
+    "babel-eslint": "10.x",
     "date-fns": "^2.28.0",
+    "eslint": "6.x",
+    "eslint-plugin-flowtype": "4.x",
+    "eslint-plugin-import": "2.x",
+    "eslint-plugin-jsx-a11y": "6.x",
+    "eslint-plugin-react": "7.x",
+    "eslint-plugin-react-hooks": "2.x",
     "firebase": "^9.6.11",
     "moment": "^2.29.3",
     "react": "^18.0.0",
@@ -53,6 +62,8 @@
     ]
   },
   "devDependencies": {
-    "devextreme-themebuilder": "^21.2.3"
+    "devextreme-themebuilder": "^21.2.3",
+    "eslint-config-react": "^1.1.7",
+    "eslint-config-react-app": "^7.0.1"
   }
 }

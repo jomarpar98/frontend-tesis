@@ -13,10 +13,12 @@ import axios from 'axios'
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import {PruebaUsabilidadContext} from "../context/PruebaContext";
 
 const Navbar = ({setSelection}) => {
 
   const { user, setUser } = useContext(UserContext);
+  const {pruebaUsabilidad} = useContext(PruebaUsabilidadContext)
   const history = useHistory()
   const location = useLocation()
   const theme = useTheme();
@@ -66,8 +68,9 @@ const Navbar = ({setSelection}) => {
   return location.pathname==="/login" ? null : (
     <StyledNavbar>
       {hidden &&
-      <div className="nav-items">
-        {location.pathname !== '/pruebasUsabilidad' && navbarItems.map((item) => (!item.roles || (user.idRol && item.roles.includes(user.idRol))) && (
+      <div className="nav-items" style={{margin:'auto'}}>
+        {location.pathname !== '/pruebasUsabilidad' && user.idRol === 1 && pruebaUsabilidad.Miembros[0].esInvestigador && navbarItems.map((item) => (!item.roles || (user.idRol && item.roles.includes(user.idRol))) && (
+          <div style={{alignSelf:'center'}} onClick={()=>{item.label === "Ejecución" ? history.push("/comenzar-prueba") : item.label === "Análisis" ? history.push("/analisis-prueba-usabilidad") : history.push("/visualizar-prueba-usabilidad")}}>
           <NavbarItem
             key={item.label}
             label={item.label}
@@ -75,6 +78,7 @@ const Navbar = ({setSelection}) => {
             rolUsuario={user && user.idRol}
             setSelection={setSelection}
           />
+          </div>
         ))}
       </div>
       }

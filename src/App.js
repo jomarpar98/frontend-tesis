@@ -5,6 +5,7 @@ import Router from "./routers/Router";
 import theme from './styles/theme';
 import PruebasUsabilidad from "./pages/PruebasUsabilidad";
 import {UserProvider} from "./context/UserContext";
+import {PruebaUsabilidadProvider} from "./context/PruebaContext";
 
 const App = () => {
 
@@ -33,7 +34,9 @@ const App = () => {
       <ThemeMaterial theme = {theme}>
         <ThemeStyled theme = {theme}>
           <UserProvider>
-            <Router/>
+            <PruebaUsabilidadProvider>
+              <Router/>
+            </PruebaUsabilidadProvider>
           </UserProvider>
         </ThemeStyled>
       </ThemeMaterial>

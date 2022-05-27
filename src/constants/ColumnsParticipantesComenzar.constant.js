@@ -3,53 +3,54 @@
 import ButtonTesis from "../components/ButtonTesis";
 //Mui
 import Grid from '@mui/material/Grid';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import MovieIcon from '@mui/icons-material/Movie';
 import IconButtonTesis from "../components/IconButtonTesis";
 
-export const ColumnsMiembros = (handleDelete,handleOpenTipos) => [
+export const ColumnsParticipantesComenzar = (handleOpen) => [
   {
     field: "nombre",
     headerName: "Nombre",
     flex: 1,
     sortable: true,
-    filterable: true,
+    filterable: false,
+    valueGetter: (params) =>
+      `${params.value} ${params.getValue(params.id, 'apPaterno')} ${params.getValue(params.id, 'apMaterno')}`,
+  },
+  {
+    field: "perfil",
+    headerName: "Perfil",
+    flex: 1,
+    sortable: true,
+    filterable: false,
     renderCell: (cellValues) => {
       return(
-        `${cellValues.row.Usuario.nombre} ${cellValues.row.Usuario.apPaterno} ${cellValues.row.Usuario.apMaterno}`
+        cellValues.row.perfil
       )
     }
   },
   {
-    field: "rol",
-    headerName: "Tipo de miembro",
-    flex: 0.6,
+    field: "observador",
+    headerName: "Observador",
+    flex: 1,
     sortable: true,
     filterable: false,
     renderCell: (cellValues) => {
       return(
-        cellValues.row.rol
+        cellValues.row.observador
       )
     }
-  },
-  { field: "correoElectronico", headerName: "Correo electrónico", flex: 1,  renderCell: (cellValues) => {
-      return(
-        cellValues.row.Usuario.email
-      )
-    },
-    sortable: true,
-    filterable: false,
   },
   {
     field: "opciones",
-    headerName: "Editar",
+    headerName: "Empezar prueba",
     flex: 0.45,
     renderCell: (cellValues) => {
       return (
         <Grid container justifyContent="flex-center" spacing={2}  >
           <Grid item >
-            <IconButtonTesis onClick={()=>{handleOpenTipos(false,cellValues.row)}}>
-              <EditIcon  />
+            <IconButtonTesis onClick={()=>{ }}>
+              <PlayArrowIcon  />
             </IconButtonTesis>
           </Grid>
         </Grid>
@@ -60,14 +61,14 @@ export const ColumnsMiembros = (handleDelete,handleOpenTipos) => [
   },
   {
     field: "opciones2",
-    headerName: "Eliminar",
-    flex: 0.3,
+    headerName: "Grabaciones",
+    flex: 0.45,
     renderCell: (cellValues) => {
       return (
         <Grid container justifyContent="flex-start"  >
           <Grid item >
-            <IconButtonTesis onClick={()=>{handleDelete(cellValues.row.Usuario)}}>
-              <DeleteForeverIcon  />
+            <IconButtonTesis onClick={()=>{handleOpen()}}>
+              <MovieIcon  />
             </IconButtonTesis>
           </Grid>
         </Grid>

@@ -44,3 +44,13 @@ export async function updateUsuario(id, nombre, apPaterno, apMaterno, email, idR
 export async function deleteUsuario(id) {
   await axios.delete(`${url}usuario/${id}`)
 }
+
+export async function getDisponibles(setMiembros,idPrueba,idUsuario){
+  let miembros = await axios.get(`${url}usuario/disponibles/${idPrueba}/${idUsuario}`)
+  let datos = miembros.data.map(m=>{
+    m.id = m.idUsuario
+    m.rol = ROLES[m.idRol]
+    return m
+  })
+  setMiembros(datos)
+}

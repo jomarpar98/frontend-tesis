@@ -30,3 +30,19 @@ export async function createPruebaUsabilidad(nombre, enlace, software, idUsuario
 export async function deletePruebaUsabilidad(idPrueba) {
   axios.delete(`${url}pruebaUsabilidad/${idPrueba}`)
 }
+
+export async function updatePruebaUsabilidad(nombre, enlace, software, idUsuario, idPruebaUsabilidad,eVideoconfe = '') {
+  let prueba = {
+    nombre: nombre,
+    software: software,
+    eSistema: enlace,
+    eVideoconfe: eVideoconfe,
+    creacion: new Date(),
+    idCreador: idUsuario
+  }
+  axios.put(`${url}pruebaUsabilidad/${idPruebaUsabilidad}`,prueba,
+    {headers:{
+        'Content-Type': 'application/json',
+      }
+    })
+}

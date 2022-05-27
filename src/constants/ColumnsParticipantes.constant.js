@@ -7,15 +7,18 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import IconButtonTesis from "../components/IconButtonTesis";
 
-export const ColumnsParticipantes = () => [
+export const ColumnsParticipantes = (handleOpenNuevoParticipante,handleDeleteParticipante) => [
   {
     field: "nombre",
     headerName: "Nombre",
     flex: 1,
     sortable: true,
     filterable: false,
-    valueGetter: (params) =>
-      `${params.value} ${params.getValue(params.id, 'ap_paterno')} ${params.getValue(params.id, 'ap_materno')}`,
+    renderCell: (cellValues) => {
+      return(
+        `${cellValues.row.Usuario.nombre} ${cellValues.row.Usuario.apPaterno} ${cellValues.row.Usuario.apMaterno}`
+      )
+    }
   },
   {
     field: "perfil",
@@ -25,12 +28,16 @@ export const ColumnsParticipantes = () => [
     filterable: false,
     renderCell: (cellValues) => {
       return(
-        cellValues.row.rol
+        cellValues.row.PerfilParticipante.perfil
       )
     }
   },
-  { field: "correoElectronico", headerName: "Correo electrónico", flex: 1,  valueGetter: (params) =>
-      `${params.getValue(params.id, 'correo_electronico')}`,
+  { field: "correoElectronico", headerName: "Correo electrónico", flex: 1,
+    renderCell: (cellValues) => {
+      return(
+        `${cellValues.row.Usuario.email}`
+      )
+    },
     sortable: true,
     filterable: false,
   },
@@ -42,7 +49,7 @@ export const ColumnsParticipantes = () => [
     filterable: false,
     renderCell: (cellValues) => {
       return(
-        cellValues.row.rol
+        `${cellValues.row.Observador.nombre} ${cellValues.row.Observador.apPaterno} ${cellValues.row.Observador.apMaterno}`
       )
     }
   },
@@ -54,7 +61,7 @@ export const ColumnsParticipantes = () => [
       return (
         <Grid container justifyContent="flex-center" spacing={2}  >
           <Grid item >
-            <IconButtonTesis onClick={()=>{ }}>
+            <IconButtonTesis onClick={()=>{handleOpenNuevoParticipante(false,cellValues.row)}}>
               <EditIcon  />
             </IconButtonTesis>
           </Grid>
@@ -72,7 +79,7 @@ export const ColumnsParticipantes = () => [
       return (
         <Grid container justifyContent="flex-start"  >
           <Grid item >
-            <IconButtonTesis onClick={()=>{ }}>
+            <IconButtonTesis onClick={()=>{handleDeleteParticipante(cellValues.row.idUsuario) }}>
               <DeleteForeverIcon  />
             </IconButtonTesis>
           </Grid>

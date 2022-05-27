@@ -4,10 +4,10 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import AlarmOnIcon from '@mui/icons-material/AlarmOn';
 import BarChartIcon from '@mui/icons-material/BarChart';
 export const navbarItems = [
-  // createNavbarItem("Planeación", null, <AssignmentIcon />,
-  // ),
-  // createNavbarItem("Ejecución", null, <AlarmOnIcon />,
-  // ),
-  // createNavbarItem("Analisis", null, <BarChartIcon />,
-  // ),
+  createNavbarItem("Planeación", null, <AssignmentIcon />,
+  ),
+  createNavbarItem("Ejecución", null, <AlarmOnIcon />,
+  ),
+  createNavbarItem("Análisis", null, <BarChartIcon />,
+  ),
 ]

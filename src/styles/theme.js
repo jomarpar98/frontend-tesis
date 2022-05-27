@@ -19,6 +19,7 @@ const theme =createTheme(
       white: "#FFFFFF",
       black: "#000000",
       fondo: "#ECECEC",
+      select: "#d3d3d3",
     },
     shape: {
       borderRadius: 5,

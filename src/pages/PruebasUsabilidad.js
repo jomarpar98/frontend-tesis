@@ -16,9 +16,10 @@ import {UserContext} from "../context/UserContext";
 import {
   createPruebaUsabilidad,
   deletePruebaUsabilidad,
-  getPruebasUsabilidad
-} from "../services/PruebasUsabilidadService";
+  getPruebasUsabilidad, updatePruebaUsabilidad
+} from "../services/PruebaUsabilidadService";
 import {useHistory} from "react-router-dom";
+import {PruebaUsabilidadContext} from "../context/PruebaContext";
 
 const PruebasUsabilidad = () => {
 
@@ -26,6 +27,7 @@ const PruebasUsabilidad = () => {
   const[nombre,setNombre] = useState('');
   const[software,setSoftware] = useState('');
   const[enlace,setEnlace] = useState('');
+  const[idSelect,setIdSelect] = useState(null);
   const[esNuevo,setEsNuevo] = useState(true);
   const[disable,setDisable] = useState(false);
   const[openNuevaPrueba,setOpenNuevaPrueba] = useState(false);
@@ -33,6 +35,7 @@ const PruebasUsabilidad = () => {
   const history = useHistory();
 
   const {user} = useContext(UserContext);
+  const {setPruebaUsabilidad} = useContext(PruebaUsabilidadContext);
 
   const theme = useTheme()
 
@@ -47,8 +50,9 @@ const PruebasUsabilidad = () => {
       setEnlace('')
       setNombre('')
     } else {
+      setIdSelect(prueba.idPruebaUsabilidad)
       setNombre(prueba.nombre)
-      setEnlace(prueba.enlace)
+      setEnlace(prueba.eSistema)
       setSoftware(prueba.software)
     }
     setOpenNuevaPrueba(true);
@@ -68,9 +72,16 @@ const PruebasUsabilidad = () => {
 
   const handleGuardar = () =>{
     setDisable(true)
-    createPruebaUsabilidad(nombre,enlace,software,user.idUsuario).then(()=>
-      window.location.reload()
-    )
+    if(esNuevo){
+      createPruebaUsabilidad(nombre,enlace,software,user.idUsuario).then(()=>
+        window.location.reload()
+      )
+    }
+    else {
+      updatePruebaUsabilidad(nombre,enlace,software,user.idUsuario,idSelect).then(()=>
+        window.location.reload()
+      )
+    }
   }
 
   const handleDelete = (prueba) => {
@@ -80,14 +91,8 @@ const PruebasUsabilidad = () => {
   }
 
   const handleNext = (prueba) => {
-    history.push({
-      pathname: "/visualizar-prueba-usabilidad",
-      search: '?query=abc',
-      state: {
-        idPrueba: prueba.idPruebaUsabilidad,
-        nombrePrueba: prueba.nombre,
-      }
-    });
+    setPruebaUsabilidad(prueba)
+    history.push("/visualizar-prueba-usabilidad");
   }
 
   const handleSearch = e => {
@@ -117,26 +122,32 @@ const PruebasUsabilidad = () => {
             onChange={handleSearch}
           />
         </Grid>
-        <Grid item xs={2} sx={{textAlign: 'end'}}>
+        {user.idRol === 1 &&
+        <Grid item xs={2} sx={{textAlign: 'end',alignSelf:'center'}}>
           <ButtonTesis label="Nueva prueba" variant="contained" onClick={()=>handleOpen(true)} endIcon={<AddIcon/>} />
         </Grid>
+        }
       </Grid>
       <Grid container justifyContent='space-between' sx={{marginTop: '30px', marginBottom: '10px',backgroundColor: theme.palette.fondo,borderRadius: '15px', padding: '20px'}}>
         {recordsFiltered.map((prueba,i) =>
           <Grid container xs={12} sx={{marginTop: '10px', marginBottom: '10px',backgroundColor: theme.palette.primary.dark, padding: '20px', borderRadius: '15px'}}>
-            <Grid item xs={9}>
+            <Grid item xs={user.idRol === 1 ? 9:11}>
               <LabelTesis fontSize="20px" fontWeight="bold">{prueba.nombre}</LabelTesis>
             </Grid>
-            <Grid item xs={1}>
-              <IconButtonTesis onClick={()=>handleOpen(false,prueba)}>
-                <EditIcon/>
-              </IconButtonTesis>
-            </Grid>
-            <Grid item xs={1}>
-              <IconButtonTesis onClick={()=>handleDelete(prueba)}>
-                <DeleteForeverIcon/>
-              </IconButtonTesis>
-            </Grid>
+            {user.idRol === 1 &&
+              <>
+                <Grid item xs={1}>
+                  <IconButtonTesis onClick={()=>handleOpen(false,prueba)}>
+                    <EditIcon/>
+                  </IconButtonTesis>
+                </Grid>
+                <Grid item xs={1}>
+                  <IconButtonTesis onClick={()=>handleDelete(prueba)}>
+                    <DeleteForeverIcon/>
+                  </IconButtonTesis>
+                </Grid>
+              </>
+            }
             <Grid item xs={1}>
               <IconButtonTesis onClick={()=>handleNext(prueba)}>
                 <NavigateNextIcon/>
@@ -179,7 +190,7 @@ const PruebasUsabilidad = () => {
             <TexfieldTesis  variant="outlined" sx={{width:'100%'}} defaultValue={enlace} onBlur={handleEnlaceChange}/>
           </Grid>
         </Grid>
-        <Grid container>
+        <Grid container sx={{marginTop:'10px'}}>
           <Grid item xs={9}>
             <ButtonTesis label="Cancelar" onClick={handleCloseNuevaPrueba} sx={{outline:"auto"}} />
           </Grid>

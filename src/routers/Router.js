@@ -19,6 +19,16 @@ import Navbar from "../components/Navbar";
 import * as PropTypes from "prop-types";
 import TabsNavigation from "../components/TabsNavigation";
 import UsuariosSistema from "../pages/UsuariosSistema";
+import Cuestionario from "../pages/Cuestionario";
+import ComenzarParticipantes from "../pages/ComenzarParticipantes";
+import CuestionariosResponder from "../pages/CuestionariosResponder";
+import FichaObservacion from "../pages/FichaObservacion";
+import TareasRealizar from "../pages/TareasRealizar";
+import CuestionarioResponder from "../pages/CuestionarioResponder";
+import OpcionesPruebaUsabilidadAnalisis from "../pages/PruebaUsabilidadAnalisis";
+import ObservacionesRealizadas from "../pages/ObservacionesRealizadas";
+import CuestionariosRealizados from "../pages/CuestionariosRealizados";
+import CuestionarioRealizado from "../pages/CuestionarioRealizado";
 
 (function() {
   const localUser = JSON.parse(localStorage.getItem('user'))
@@ -91,6 +101,18 @@ const Router = () => {
             <Route exact path="/tareas" component={Tareas}  />
             <Route exact path="/entrevista" component={Entrevista}  />
             <Route exact path="/usuariosSistema" component={UsuariosSistema}  />
+            <Route exact path="/visaulizar-cuestionario" component={Cuestionario}  />
+
+            <Route exact path="/comenzar-prueba" component={ComenzarParticipantes}  />
+            <Route exact path="/cuestionarios-a-responder" component={CuestionariosResponder}  />
+            <Route exact path="/fichaObservacion" component={FichaObservacion}  />
+            <Route exact path="/tareas-a-realizar" component={TareasRealizar}  />
+            <Route exact path="/visualizar-cuestionario-responder" component={CuestionarioResponder}  />
+
+            <Route exact path="/analisis-prueba-usabilidad" component={OpcionesPruebaUsabilidadAnalisis}  />
+            <Route exact path="/observaciones-realizadas" component={ObservacionesRealizadas}  />
+            <Route exact path="/cuestionarios-realizados" component={CuestionariosRealizados}  />
+            <Route exact path="/visualizar-cuestionario-realizado" component={CuestionarioRealizado}  />
           </Root>
         </Route>
         <Route render={() => <Redirect to="/pruebasUsabilidad"/>}/>

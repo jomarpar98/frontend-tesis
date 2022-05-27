@@ -5,10 +5,11 @@ import Dialog from '@mui/material/Dialog';
 
 const DialogTesis = (props) => {
   const {onHide, visible} = props;
+  const width = props.width ? props.width : '80%'
 
   return (
     <Dialog
-      sx={{ '& .MuiDialog-paper': { width: '80%', maxHeight: '80%' }}}
+      sx={{ '& .MuiDialog-paper': { width: width, maxHeight: '80%' }}}
       open={visible}
       onClose={onHide}
     >

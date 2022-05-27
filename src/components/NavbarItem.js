@@ -19,27 +19,27 @@ const NavbarItem = ({ label, menuItems, rolUsuario, setSelection }) => {
     <StyledNavbarItem>
       <div className="nav-item" onClick={handleClick}>
         <span className="nombre-item">{label}</span>
-        <ArrowDropDownIcon />
+        {/*<ArrowDropDownIcon />*/}
       </div>
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button',
-        }}
-      >
-        {menuItems.map(item => (!item.roles || item.roles.includes(rolUsuario)) ?  (
-          <NavMenuItem
-            key={item.label}
-            label={item.label}
-            pathname={item.pathname}
-            handleClose={handleClose}
-            setSelection={setSelection}
-          />
-        ) : null)}
-      </Menu>
+      {/*<Menu*/}
+      {/*  id="basic-menu"*/}
+      {/*  anchorEl={anchorEl}*/}
+      {/*  open={open}*/}
+      {/*  onClose={handleClose}*/}
+      {/*  MenuListProps={{*/}
+      {/*    'aria-labelledby': 'basic-button',*/}
+      {/*  }}*/}
+      {/*>*/}
+      {/*  {menuItems.map(item => (!item.roles || item.roles.includes(rolUsuario)) ?  (*/}
+      {/*    <NavMenuItem*/}
+      {/*      key={item.label}*/}
+      {/*      label={item.label}*/}
+      {/*      pathname={item.pathname}*/}
+      {/*      handleClose={handleClose}*/}
+      {/*      setSelection={setSelection}*/}
+      {/*    />*/}
+      {/*  ) : null)}*/}
+      {/*</Menu>*/}
     </StyledNavbarItem>
   );
 }
