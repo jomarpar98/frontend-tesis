@@ -20,6 +20,7 @@ const theme =createTheme(
       black: "#000000",
       fondo: "#ECECEC",
       select: "#d3d3d3",
+      gris: "#bdbdbd",
     },
     shape: {
       borderRadius: 5,

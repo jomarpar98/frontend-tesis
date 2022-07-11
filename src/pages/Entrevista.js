@@ -10,6 +10,7 @@ import ButtonTesis from "../components/ButtonTesis";
 import SaveIcon from "@mui/icons-material/Save";
 import {PruebaUsabilidadContext} from "../context/PruebaContext";
 import {createEntrevista, getEntrevista} from "../services/PreguntaService";
+import NotificationTesis from "../components/NotificationTesis";
 
 const Entrevista = () =>{
   const theme = useTheme()
@@ -17,6 +18,7 @@ const Entrevista = () =>{
   const {pruebaUsabilidad} = useContext(PruebaUsabilidadContext)
   const [preguntas,setPreguntas] = useState([]);
   const [disable,setDisable] = useState(false);
+  const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
 
 
   const pregunta = {
@@ -42,8 +44,20 @@ const Entrevista = () =>{
   }
 
   const handleGuardar = () => {
+    setNotify({
+      isOpen: true,
+      message: 'Guardando entrevista',
+      type: 'info'})
     createEntrevista(preguntas,pruebaUsabilidad.idPruebaUsabilidad).then(()=>{
-      window.location.reload()
+      setNotify({
+        isOpen: true,
+        message: 'Entrevista guardada correctamente',
+        type: 'success'})
+    }).catch(()=>{
+      setNotify({
+        isOpen: true,
+        message: 'Error al guardar',
+        type: 'error'})
     })
   }
 
@@ -66,7 +80,8 @@ const Entrevista = () =>{
       </Grid>
       <Grid container justifyContent='space-between' sx={{marginTop: '30px', marginBottom: '10px',backgroundColor: theme.palette.fondo,borderRadius: '15px', padding: '20px'}}>
         {preguntas.map((p,i)=>
-          <Grid container xs={12} sx={{marginTop: '10px', marginBottom: '10px',backgroundColor: theme.palette.primary.dark, padding: '20px', borderRadius: '15px'}}>
+          <Grid container xs={12} sx={{marginTop: '10px', marginBottom: '10px',backgroundColor: theme.palette.primary.dark, padding: '10px',
+            paddingLeft: '20px',paddingRight:'20px', borderRadius: '15px'}}>
             <Grid item xs={9} sx={{alignSelf: 'center'}}>
               <LabelTesis fontSize="20px" fontWeight="bold">{`Pregunta ${i+1}:`}</LabelTesis>
             </Grid>
@@ -100,6 +115,11 @@ const Entrevista = () =>{
           </Grid>
         </Grid>
       </Grid>
+      <NotificationTesis
+        notify={notify}
+        setNotify={setNotify}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      />
     </Grid>
   )
 

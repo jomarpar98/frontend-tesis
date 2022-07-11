@@ -15,7 +15,7 @@ export async function createPerfil(idPrueba,perfil){
     perfil:perfil,
     idPruebaUsabilidad:idPrueba
   }
-  axios.post(`${url}perfilParticipante`,perfilNuevo,
+  await axios.post(`${url}perfilParticipante`,perfilNuevo,
     {headers:{
         'Content-Type': 'application/json',
       }
@@ -23,7 +23,7 @@ export async function createPerfil(idPrueba,perfil){
 }
 
 export async function deletePerfil(idPerfil) {
-  axios.delete(`${url}perfilParticipante/${idPerfil}`)
+  await axios.delete(`${url}perfilParticipante/${idPerfil}`)
 }
 
 export async function updatePerfil(idPrueba,perfil,idPerfil) {
@@ -32,7 +32,7 @@ export async function updatePerfil(idPrueba,perfil,idPerfil) {
     perfil:perfil,
     idPruebaUsabilidad:idPrueba
   }
-  axios.put(`${url}perfilParticipante/${idPerfil}`,perfilNuevo,
+  await axios.put(`${url}perfilParticipante/${idPerfil}`,perfilNuevo,
     {headers:{
         'Content-Type': 'application/json',
       }

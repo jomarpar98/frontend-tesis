@@ -69,7 +69,7 @@ function GoogleLoginButton (props) {
     <GoogleLogin
       clientId={GOOGLE_CLIENT_ID}
       render={renderProps => (
-        <ButtonTesis style={loginButtonStyle} label="Iniciar con Google" startIcon={<SvgIcon style={{height:'30px',width:'30px',marginRight:'16px'}}><GoogleSVG/></SvgIcon>} onClick={renderProps.onClick} disabled={renderProps.disabled}/>
+        <ButtonTesis style={loginButtonStyle} label="Iniciar con Google" startIcon={<SvgIcon style={{height:'30px',width:'30px',marginRight:'16px'}}><GoogleSVG/></SvgIcon>} onClick={renderProps.onClick} />
       )}
       onSuccess={onSuccess}
       onFailure={onFailure}

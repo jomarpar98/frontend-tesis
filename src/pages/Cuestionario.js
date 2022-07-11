@@ -13,6 +13,7 @@ import CheckboxTesis from "../components/CheckboxTesis";
 import TexfieldTesis from "../components/TexfieldTesis";
 import DialogTesis from "../components/DialogTesis";
 import {createPreguntas, getPreguntas} from "../services/PreguntaService";
+import NotificationTesis from "../components/NotificationTesis";
 
 const tiposPregunta = [{idTipoPregunta:0,tipo:'Abierta'},{idTipoPregunta:1,tipo:'Selección Multiple'},
   {idTipoPregunta:2,tipo:'Selección Unica'},{idTipoPregunta:3,tipo:'Likert'}]
@@ -26,6 +27,7 @@ const Cuestionario = (props) => {
   const [preguntas,setPreguntas] = useState([]);
   const [tipoAgregar,setTipoAgregar] = useState(0);
   const [openNuevaPregunta,setOpenNuevaPregunta] = useState(false);
+  const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
 
   const handleCloseNuevaPregunta = () => {
     setOpenNuevaPregunta(false);
@@ -46,11 +48,25 @@ const Cuestionario = (props) => {
 
   const handleAdd = () => {
     setOpenNuevaPregunta(true);
+    setTipoAgregar(tiposPregunta[0].idTipoPregunta);
   }
 
   const handleGuardar = () => {
+    setNotify({
+      isOpen: true,
+      message: 'Guardando cuestionario',
+      type: 'info'})
     createPreguntas(preguntas,idCuestionario).then(()=>{
-      window.location.reload()
+      setNotify({
+        isOpen: true,
+        message: 'Cuestionario guardado correctamente',
+        type: 'success'})
+      getPreguntas(setPreguntas,idCuestionario)
+    }).catch(()=>{
+      setNotify({
+        isOpen: true,
+        message: 'Error al guardar',
+        type: 'error'})
     })
   }
 
@@ -111,7 +127,8 @@ const Cuestionario = (props) => {
         {preguntas.map((p,i)=>
           <>
           <Grid container xs={12} sx={{marginTop: '10px',marginBottom: p.idTipoPregunta === 0 ? '10px':'0px' ,
-            backgroundColor: theme.palette.primary.dark, padding: '20px', borderRadius: '15px',
+            backgroundColor: theme.palette.primary.dark, padding: '10px',
+            paddingLeft: '20px',paddingRight:'20px', borderRadius: '15px',
             borderBottomLeftRadius:p.idTipoPregunta === 0 ? '15px':'0',borderBottomRightRadius:p.idTipoPregunta === 0 ? '15px':'0'}}>
             <Grid item xs={9} sx={{alignSelf: 'center'}}>
               <LabelTesis fontSize="20px" fontWeight="bold">{`Pregunta ${i+1}:`}</LabelTesis>
@@ -124,8 +141,8 @@ const Cuestionario = (props) => {
             <Grid item xs={12}>
               <textarea
                 aria-label="pregunta"
-                value={p.enunciado}
-                onChange={(e) => handlePreguntaChange(e, i)}
+                defaultValue={p.enunciado}
+                onBlur={(e) => handlePreguntaChange(e, i)}
                 placeholder="Ingrese una nueva pregunta"
                 style={{width: '100%', resize: 'none',borderRadius:'5px',fontSize:'14px'}}
               />
@@ -140,8 +157,8 @@ const Cuestionario = (props) => {
                     {p.idTipoPregunta === 1 && <CheckboxTesis disabled/>}
                     {(p.idTipoPregunta === 2 || p.idTipoPregunta === 3) && <Radio disabled/>}
                   </Grid>
-                  <Grid item xs={10} sx={{alignSelf: 'center',padding: '10px'}}>
-                    <TexfieldTesis size="small" variant="outlined" sx={{width:'100%'}} value={a.alternativa} onChange={(e)=>handleAlternativaChange(e,i,j)}/>
+                  <Grid item xs={10} sx={{alignSelf: 'center'}}>
+                    <TexfieldTesis size="small" variant="outlined" sx={{width:'100%'}} defaultValue={a.alternativa} onBlur={(e)=>handleAlternativaChange(e,i,j)}/>
                   </Grid>
                   <Grid item xs={1} sx={{textAlign: 'center', alignSelf: 'center'}}>
                     <IconButtonTesis onClick={()=>{handleDeleteAlternativa(i,j)}}>
@@ -150,7 +167,7 @@ const Cuestionario = (props) => {
                   </Grid>
                 </Grid>
               )}
-              {p.idTipoPregunta !== 3 && <Grid item xs={1} sx={{textAlign: "start",marginTop: '10px', marginBottom:'10px'}}>
+              {<Grid item xs={1} sx={{textAlign: "start",marginTop: '10px', marginBottom:'10px'}}>
                 <IconButtonTesis onClick={()=>{handleAddAlternativa(i)}} sx={{border: 'dotted'}}>
                   <AddIcon/>
                 </IconButtonTesis>
@@ -199,6 +216,11 @@ const Cuestionario = (props) => {
           </Grid>
         </Grid>
       </DialogTesis>
+      <NotificationTesis
+        notify={notify}
+        setNotify={setNotify}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      />
     </Grid>
   )
 

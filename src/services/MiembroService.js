@@ -20,11 +20,16 @@ export async function createMiembros(miembros) {
 }
 
 export async function deleteMiembro(idPrueba,idUsuario) {
-  axios.delete(`${url}miembro/${idPrueba}/${idUsuario}`)
+  await axios.delete(`${url}miembro/${idPrueba}/${idUsuario}`)
+}
+
+export async function getMiembro(setMiembro,idPrueba,idUsuario){
+  let miembro = await axios.get(`${url}miembro/${idPrueba}/${idUsuario}`)
+  setMiembro(miembro.data)
 }
 
 export async function updateMiembro(miembro) {
-  axios.put(`${url}miembro/${miembro.idPruebaUsabilidad}/${miembro.idUsuario}`,miembro,
+  await axios.put(`${url}miembro/${miembro.idPruebaUsabilidad}/${miembro.idUsuario}`,miembro,
     {headers:{
         'Content-Type': 'application/json',
       }

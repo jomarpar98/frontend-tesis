@@ -12,6 +12,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import ButtonTesis from "../components/ButtonTesis";
 import {PruebaUsabilidadContext} from "../context/PruebaContext";
 import {createTareas, getTareas} from "../services/TareaService";
+import NotificationTesis from "../components/NotificationTesis";
 
 
 const Tareas = () =>{
@@ -21,6 +22,7 @@ const Tareas = () =>{
   const [tareas,setTareas] = useState([]);
   const [perfiles,setPerfiles] = useState([]);
   const [disable,setDisable] = useState(false);
+  const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
   const [perfilSeleccionado, setPerfilSeleccionado] = useState("noPerfiles");
 
   const tarea = {
@@ -51,7 +53,21 @@ const Tareas = () =>{
   }
 
   const handleGuardar = () => {
-    createTareas(tareas,perfilSeleccionado)
+    setNotify({
+      isOpen: true,
+      message: 'Guardando tareas',
+      type: 'info'})
+    createTareas(tareas,perfilSeleccionado).then(()=>{
+      setNotify({
+        isOpen: true,
+        message: 'Tareas guardadas correctamente',
+        type: 'success'})
+    }).catch(()=>{
+      setNotify({
+        isOpen: true,
+        message: 'Error al guardar',
+        type: 'error'})
+    })
   }
 
   useEffect(()=>{
@@ -96,7 +112,8 @@ const Tareas = () =>{
       </Grid>
       <Grid container justifyContent='space-between' sx={{marginTop: '30px', marginBottom: '10px',backgroundColor: theme.palette.fondo,borderRadius: '15px', padding: '20px'}}>
         {tareas.map((t,i)=>
-          <Grid container xs={12} sx={{marginTop: '10px', marginBottom: '10px',backgroundColor: theme.palette.primary.dark, padding: '20px', borderRadius: '15px'}}>
+          <Grid container xs={12} sx={{marginTop: '10px', marginBottom: '10px',backgroundColor: theme.palette.primary.dark, padding: '10px',
+            paddingLeft: '20px',paddingRight:'20px', borderRadius: '15px'}}>
             <Grid item xs={9} sx={{alignSelf: 'center'}}>
               <LabelTesis fontSize="20px" fontWeight="bold">{`Tarea ${i+1}:`}</LabelTesis>
             </Grid>
@@ -111,7 +128,7 @@ const Tareas = () =>{
                 value={t.tarea}
                 onChange={(e)=>handleTareaChange(e,i)}
                 placeholder="Ingrese una nueva tarea"
-                style={{ width: '100%',resize: 'none',borderRadius:'5px',fontSize:'14px'}}
+                style={{ width: '100%',height:'60px',resize: 'none',borderRadius:'5px',fontSize:'14px'}}
               />
             </Grid>
           </Grid>
@@ -140,6 +157,11 @@ const Tareas = () =>{
           </Grid>
         }
       </Grid>
+      <NotificationTesis
+        notify={notify}
+        setNotify={setNotify}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      />
     </Grid>
   )
 

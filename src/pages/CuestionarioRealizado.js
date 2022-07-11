@@ -5,30 +5,38 @@ import IconButtonTesis from "../components/IconButtonTesis";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import LabelTesis from "../components/LabelTesis";
 import DownloadIcon from '@mui/icons-material/Download';
-import {createPreguntas, getPreguntas} from "../services/PreguntaService";
-
-const tiposPregunta = [{idTipoPregunta:0,tipo:'Abierta'},{idTipoPregunta:1,tipo:'Selección Multiple'},
-  {idTipoPregunta:2,tipo:'Selección Unica'},{idTipoPregunta:3,tipo:'Likert'}]
-
-
+import {Paper} from '@material-ui/core';
+import {Bar} from 'react-chartjs-2';
+import {Chart as CharJS} from 'chart.js/auto'
+import {getExcelPreguntasRespuestas, getPreguntasRespuestas} from "../services/PreguntaService";
+import NotificationTesis from "../components/NotificationTesis";
 
 const CuestionarioRealizado = (props) => {
   const theme = useTheme()
   const history = useHistory()
   const {idCuestionario,nombreCuestionario} = props.location.state;
   const [preguntas,setPreguntas] = useState([]);
+  const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
 
   const handleClickRegresar = () =>{
     history.push("/cuestionarios-realizados");
   }
 
-  const handlePreguntaChange = (e, i) => {
-    preguntas[i].enunciado = e.target.value
-    setPreguntas([...preguntas]);
+  const handleClickDescargar = () => {
+    setNotify({
+      isOpen: true,
+      message: 'Descargando',
+      type: 'info'})
+    getExcelPreguntasRespuestas(idCuestionario).then(()=>{
+      setNotify({
+        isOpen: true,
+        message: 'Excel descargado correctamente',
+        type: 'success'})
+    })
   }
 
   useEffect(()=>{
-    getPreguntas(setPreguntas,idCuestionario)
+    getPreguntasRespuestas(setPreguntas,idCuestionario)
   },[])
 
   return (
@@ -44,7 +52,7 @@ const CuestionarioRealizado = (props) => {
           <Typography sx={{ fontWeight: '700', fontSize: '2.25rem',margin:2}}>{nombreCuestionario}</Typography>
         </Grid>
         <Grid item>
-          <IconButtonTesis>
+          <IconButtonTesis onClick={handleClickDescargar}>
             <DownloadIcon/>
           </IconButtonTesis>
         </Grid>
@@ -54,27 +62,37 @@ const CuestionarioRealizado = (props) => {
         {preguntas.map((p,i)=>
           <>
             <Grid container xs={12} sx={{marginTop: '10px',marginBottom: '0px' ,
-              backgroundColor: theme.palette.primary.dark, padding: '20px', borderRadius: '15px',
+              backgroundColor: theme.palette.primary.dark, padding: '10px',
+              paddingLeft: '20px',paddingRight:'20px', borderRadius: '15px',
               borderBottomLeftRadius: '0',borderBottomRightRadius: '0'}}>
               <Grid item xs={12} sx={{alignSelf: 'center'}}>
                 <LabelTesis fontSize="20px" fontWeight="bold">{`Pregunta ${i+1}:`}</LabelTesis>
               </Grid>
               <Grid item xs={12}>
-              <textarea
-                aria-label="pregunta"
-                value={p.enunciado}
-                readOnly={true}
-                onChange={(e) => handlePreguntaChange(e, i)}
-                placeholder="Ingrese una nueva pregunta"
-                style={{width: '100%', resize: 'none',borderRadius:'5px',fontSize:'14px'}}
-              />
+                <Grid item xs={12} sx={{alignSelf: 'center'}}>
+                  <LabelTesis fontSize="18px" >{p.enunciado}</LabelTesis>
+                </Grid>
               </Grid>
             </Grid>
             <Grid container xs={12} sx={{ marginBottom: '10px',backgroundColor: theme.palette.white, paddingLeft:'20px',paddingRight:'20px',
               borderRadius: '15px',borderTopLeftRadius:'0',borderTopRightRadius:'0'}}>
-              <div style={{height: '80px'}}>
-
-              </div>
+              {p.idTipoPregunta === 0 && p.Respuesta.map((r,i)=>
+                <Grid container sx={{ marginBottom: '10px',marginTop:'10px',backgroundColor: theme.palette.gris, paddingLeft:'20px',paddingRight:'20px',
+                  borderRadius: '15px'}}>
+                  <LabelTesis>{r.respuesta}</LabelTesis>
+                </Grid>
+              )}
+              {p.idTipoPregunta !== 0 &&
+                  <Bar
+                    type={'bar'}
+                    data={p.alternativas}
+                    height={400}
+                    width={600}
+                    options={{
+                      maintainAspectRatio: false,
+                    }}
+                   />
+              }
             </Grid>
           </>
         )}
@@ -86,6 +104,11 @@ const CuestionarioRealizado = (props) => {
         </Grid>
         }
       </Grid>
+      <NotificationTesis
+        notify={notify}
+        setNotify={setNotify}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      />
     </Grid>
   )
 

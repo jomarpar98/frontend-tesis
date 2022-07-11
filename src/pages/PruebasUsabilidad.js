@@ -20,17 +20,20 @@ import {
 } from "../services/PruebaUsabilidadService";
 import {useHistory} from "react-router-dom";
 import {PruebaUsabilidadContext} from "../context/PruebaContext";
+import {getMiembro} from "../services/MiembroService";
+import NotificationTesis from "../components/NotificationTesis";
 
 const PruebasUsabilidad = () => {
 
-  const[pruebas,setPruebas] = useState([]);
-  const[nombre,setNombre] = useState('');
-  const[software,setSoftware] = useState('');
-  const[enlace,setEnlace] = useState('');
-  const[idSelect,setIdSelect] = useState(null);
-  const[esNuevo,setEsNuevo] = useState(true);
-  const[disable,setDisable] = useState(false);
-  const[openNuevaPrueba,setOpenNuevaPrueba] = useState(false);
+  const [pruebas,setPruebas] = useState([]);
+  const [nombre,setNombre] = useState('');
+  const [software,setSoftware] = useState('');
+  const [enlace,setEnlace] = useState('');
+  const [idSelect,setIdSelect] = useState(null);
+  const [esNuevo,setEsNuevo] = useState(true);
+  const [disable,setDisable] = useState(false);
+  const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
+  const [openNuevaPrueba,setOpenNuevaPrueba] = useState(false);
   const [recordsFiltered, setRecordsFiltered] = useState([]);
   const history = useHistory();
 
@@ -43,13 +46,14 @@ const PruebasUsabilidad = () => {
     setOpenNuevaPrueba(false);
   }
 
-  const handleOpen = (nuevo,prueba = {}) => {
+  const handleOpen = (nuevo,prueba = {},e) => {
     setEsNuevo(nuevo)
     if (nuevo) {
       setSoftware('')
       setEnlace('')
       setNombre('')
     } else {
+      e.stopPropagation()
       setIdSelect(prueba.idPruebaUsabilidad)
       setNombre(prueba.nombre)
       setEnlace(prueba.eSistema)
@@ -73,26 +77,89 @@ const PruebasUsabilidad = () => {
   const handleGuardar = () =>{
     setDisable(true)
     if(esNuevo){
-      createPruebaUsabilidad(nombre,enlace,software,user.idUsuario).then(()=>
-        window.location.reload()
-      )
+      setNotify({
+        isOpen: true,
+        message: 'Creando prueba',
+        type: 'info'})
+      createPruebaUsabilidad(nombre,enlace,software,user.idUsuario).then(()=>{
+        setNotify({
+          isOpen: true,
+          message: 'Prueba creada correctamente',
+          type: 'success'})
+        getPruebasUsabilidad(user,setPruebas)
+        getPruebasUsabilidad(user,setRecordsFiltered)
+        setDisable(false)
+        setOpenNuevaPrueba(false)
+      }).catch(()=>{
+        setNotify({
+          isOpen: true,
+          message: 'Error al crear',
+          type: 'error'})
+        setDisable(false)
+        setOpenNuevaPrueba(false)
+      })
     }
     else {
-      updatePruebaUsabilidad(nombre,enlace,software,user.idUsuario,idSelect).then(()=>
-        window.location.reload()
-      )
+      setNotify({
+        isOpen: true,
+        message: 'Actualizando prueba',
+        type: 'info'})
+      updatePruebaUsabilidad(nombre,enlace,software,user.idUsuario,idSelect).then(()=>{
+        setNotify({
+          isOpen: true,
+          message: 'Prueba actualizada correctamente',
+          type: 'success'})
+        getPruebasUsabilidad(user,setPruebas)
+        getPruebasUsabilidad(user,setRecordsFiltered)
+        setDisable(false)
+        setOpenNuevaPrueba(false)
+      }).catch(()=>{
+        setNotify({
+          isOpen: true,
+          message: 'Error al actualizar',
+          type: 'error'})
+        setDisable(false)
+        setOpenNuevaPrueba(false)
+      })
     }
   }
 
-  const handleDelete = (prueba) => {
-    deletePruebaUsabilidad(prueba.idPruebaUsabilidad).then(()=>
-      window.location.reload()
-    )
+  const handleDelete = (prueba,e) => {
+    e.stopPropagation()
+    setNotify({
+      isOpen: true,
+      message: 'Eliminando prueba',
+      type: 'info'})
+    deletePruebaUsabilidad(prueba.idPruebaUsabilidad).then(()=>{
+      setNotify({
+        isOpen: true,
+        message: 'Prueba eliminada correctamente',
+        type: 'success'})
+      getPruebasUsabilidad(user,setPruebas)
+      getPruebasUsabilidad(user,setRecordsFiltered)
+      setDisable(false)
+      setOpenNuevaPrueba(false)
+      }
+    ).catch(()=>{
+      setNotify({
+        isOpen: true,
+        message: 'Error al eliminar',
+        type: 'error'})
+      setDisable(false)
+      setOpenNuevaPrueba(false)
+    })
   }
 
-  const handleNext = (prueba) => {
+  const handleNext = async (prueba) => {
     setPruebaUsabilidad(prueba)
-    history.push("/visualizar-prueba-usabilidad");
+    let miembro
+    await getMiembro((m)=>{miembro=m},prueba.idPruebaUsabilidad,user.idUsuario)
+    if (miembro?.esObservador === 1 && miembro?.esInvestigador === 0) {
+      history.push("/ejecucion-miembro-prueba");
+    }
+    else {
+      history.push("/visualizar-prueba-usabilidad");
+    }
   }
 
   const handleSearch = e => {
@@ -124,42 +191,38 @@ const PruebasUsabilidad = () => {
         </Grid>
         {user.idRol === 1 &&
         <Grid item xs={2} sx={{textAlign: 'end',alignSelf:'center'}}>
-          <ButtonTesis label="Nueva prueba" variant="contained" onClick={()=>handleOpen(true)} endIcon={<AddIcon/>} />
+          <ButtonTesis label="Nueva prueba" variant="contained" onClick={(e)=>handleOpen(true,e)} endIcon={<AddIcon/>} />
         </Grid>
         }
       </Grid>
       <Grid container justifyContent='space-between' sx={{marginTop: '30px', marginBottom: '10px',backgroundColor: theme.palette.fondo,borderRadius: '15px', padding: '20px'}}>
         {recordsFiltered.map((prueba,i) =>
-          <Grid container xs={12} sx={{marginTop: '10px', marginBottom: '10px',backgroundColor: theme.palette.primary.dark, padding: '20px', borderRadius: '15px'}}>
-            <Grid item xs={user.idRol === 1 ? 9:11}>
+          <Grid onClick={()=>handleNext(prueba)} container xs={12} sx={{marginTop: '10px', marginBottom: '10px',backgroundColor: theme.palette.primary.dark, padding: '10px',
+            paddingLeft: '20px',paddingRight:'20px', borderRadius: '15px'}}>
+            <Grid item xs={user.idRol === 1 ? 10:12}>
               <LabelTesis fontSize="20px" fontWeight="bold">{prueba.nombre}</LabelTesis>
             </Grid>
             {user.idRol === 1 &&
               <>
                 <Grid item xs={1}>
-                  <IconButtonTesis onClick={()=>handleOpen(false,prueba)}>
+                  <IconButtonTesis onClick={(e)=>handleOpen(false,prueba,e)}>
                     <EditIcon/>
                   </IconButtonTesis>
                 </Grid>
                 <Grid item xs={1}>
-                  <IconButtonTesis onClick={()=>handleDelete(prueba)}>
+                  <IconButtonTesis onClick={(e)=>handleDelete(prueba,e)}>
                     <DeleteForeverIcon/>
                   </IconButtonTesis>
                 </Grid>
               </>
             }
-            <Grid item xs={1}>
-              <IconButtonTesis onClick={()=>handleNext(prueba)}>
-                <NavigateNextIcon/>
-              </IconButtonTesis>
-            </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={2}>
               <LabelTesis>{`Creado: ${prueba.creacion? format(new Date(prueba.creacion),"dd/MM/yyyy") : '' }`}</LabelTesis>
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={5}>
               <LabelTesis>{`Responsable: ${prueba.responsable.nombre} ${prueba.responsable.apPaterno} ${prueba.responsable.apMaterno}`}</LabelTesis>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={3}>
               <LabelTesis>{`Software evaluado: ${prueba.software}`}</LabelTesis>
             </Grid>
           </Grid>
@@ -199,6 +262,11 @@ const PruebasUsabilidad = () => {
           </Grid>
         </Grid>
       </DialogTesis>
+      <NotificationTesis
+        notify={notify}
+        setNotify={setNotify}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      />
     </Grid>
   )
 }

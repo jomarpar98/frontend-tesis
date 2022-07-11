@@ -4,11 +4,12 @@ import ButtonTesis from "../components/ButtonTesis";
 //Mui
 import Grid from '@mui/material/Grid';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import DownloadIcon from '@mui/icons-material/Download';
 import MovieIcon from '@mui/icons-material/Movie';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import IconButtonTesis from "../components/IconButtonTesis";
 
-export const ColumnsParticipantesComenzar = (handleOpen,handleComenzar) => [
+export const ColumnsParticipantesAnalisis = (handleClickObservaciones,handleOpen,handleClickDescargar) => [
   {
     field: "nombre",
     headerName: "Nombre",
@@ -35,14 +36,14 @@ export const ColumnsParticipantesComenzar = (handleOpen,handleComenzar) => [
   },
   {
     field: "opciones",
-    headerName: "Empezar prueba",
+    headerName: "Grabaciones",
     flex: 0.45,
     renderCell: (cellValues) => {
       return (
-        <Grid container justifyContent="flex-center" spacing={2}  >
+        <Grid container justifyContent="flex-start"  >
           <Grid item >
-            <IconButtonTesis onClick={()=>{handleComenzar(cellValues.row)}}>
-              <PlayArrowIcon  />
+            <IconButtonTesis onClick={()=>{handleOpen(cellValues.row)}}>
+              <MovieIcon  />
             </IconButtonTesis>
           </Grid>
         </Grid>
@@ -53,14 +54,32 @@ export const ColumnsParticipantesComenzar = (handleOpen,handleComenzar) => [
   },
   {
     field: "opciones2",
-    headerName: "Grabaciones",
+    headerName: "Observaciones",
     flex: 0.45,
     renderCell: (cellValues) => {
       return (
         <Grid container justifyContent="flex-start"  >
           <Grid item >
-            <IconButtonTesis onClick={()=>{handleOpen(cellValues.row)}}>
-              <MovieIcon  />
+            <IconButtonTesis onClick={()=>{handleClickObservaciones(cellValues.row)}}>
+              <VisibilityIcon  />
+            </IconButtonTesis>
+          </Grid>
+        </Grid>
+      );
+    },
+    sortable: false,
+    filterable: false
+  },
+  {
+    field: "opciones3",
+    headerName: "Descargar",
+    flex: 0.45,
+    renderCell: (cellValues) => {
+      return (
+        <Grid container justifyContent="flex-start"  >
+          <Grid item >
+            <IconButtonTesis onClick={()=>{handleClickDescargar(cellValues.row)}}>
+              <DownloadIcon  />
             </IconButtonTesis>
           </Grid>
         </Grid>

@@ -11,6 +11,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import DialogTesis from "../components/DialogTesis";
 import {deleteUsuario, getUsuarios, newUsuario, updateUsuario} from "../services/UsuarioService";
 import ROLES from "../constants/Roles.constant";
+import NotificationTesis from "../components/NotificationTesis";
 
 const UsuariosSistema = () => {
 
@@ -25,6 +26,7 @@ const UsuariosSistema = () => {
   const[esNuevo,setEsNuevo] = useState(true);
   const[disable,setDisable] = useState(false);
   const[idSeleccionado,setIdSeleccionado] = useState(null);
+  const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
 
   useEffect(()=>{
     getUsuarios(setUsuarios,setRecordsFiltered);
@@ -91,19 +93,50 @@ const UsuariosSistema = () => {
   const handleGuardar = () => {
     setDisable(true)
     if(esNuevo){
-      newUsuario(nombre,apPaterno,apMaterno,email,idRol).then(()=>
-        window.location.reload()
+      setNotify({
+        isOpen: true,
+        message: 'Creando usuario',
+        type: 'info'})
+      newUsuario(nombre,apPaterno,apMaterno,email,idRol).then(()=>{
+        setDisable(false)
+        setOpenNuevoUsuario(false)
+          setNotify({
+            isOpen: true,
+            message: 'Usuario creado correctamente',
+            type: 'success'})
+          getUsuarios(setUsuarios,setRecordsFiltered);
+      }
       )
     } else {
-      updateUsuario(idSeleccionado,nombre,apPaterno,apMaterno,email,idRol).then(()=>
-        window.location.reload()
+      setNotify({
+        isOpen: true,
+        message: 'Actualizando usuario',
+        type: 'info'})
+      updateUsuario(idSeleccionado,nombre,apPaterno,apMaterno,email,idRol).then(()=>{
+          setDisable(false)
+          setOpenNuevoUsuario(false)
+        setNotify({
+          isOpen: true,
+          message: 'Usuario actualizado correctamente',
+          type: 'success'})
+        getUsuarios(setUsuarios,setRecordsFiltered);
+      }
       )
     }
   }
 
   const handleDelete = (idUsuario) => {
-    deleteUsuario(idUsuario).then(()=>
-      window.location.reload()
+    setNotify({
+      isOpen: true,
+      message: 'Eliminando usuario',
+      type: 'info'})
+    deleteUsuario(idUsuario).then(()=>{
+      setNotify({
+        isOpen: true,
+        message: 'Usuario eliminado correctamente',
+        type: 'success'})
+      getUsuarios(setUsuarios,setRecordsFiltered);
+      }
     )
   }
 
@@ -200,6 +233,11 @@ const UsuariosSistema = () => {
           </Grid>
         </Grid>
       </DialogTesis>
+      <NotificationTesis
+        notify={notify}
+        setNotify={setNotify}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      />
     </Grid>
   )
 }

@@ -18,22 +18,16 @@ import {createPruebaUsabilidad} from "../services/PruebaUsabilidadService";
 import {getPerfiles} from "../services/PerfilService";
 import {PruebaUsabilidadContext} from "../context/PruebaContext";
 import {UserContext} from "../context/UserContext";
-
-const cuestionario = {
-  idCuestionario: 1,
-  nombre: 'Cuestionario Previo',
-  esEntrevista: false,
-  idPerfil: 1,
-  perfil: 'Alumnos PUCP',
-  preguntas: 0,
-}
+import {getCuestionarios, getCuestionariosPerfil} from "../services/CuestionarioService";
+import {getOneParticipante} from "../services/ParticipanteService";
 
 const CuestionariosResponder = () =>{
   const theme = useTheme()
   const history = useHistory()
   const {pruebaUsabilidad} = useContext(PruebaUsabilidadContext)
   const {user} = useContext(UserContext)
-  const [recordsFiltered, setRecordsFiltered] = useState([cuestionario]);
+  const [participante, setParticipante] = useState({});
+  const [recordsFiltered, setRecordsFiltered] = useState([]);
 
 
   const handleClickRegresar = () =>{
@@ -51,9 +45,19 @@ const CuestionariosResponder = () =>{
     });
   }
 
+  useEffect(()=>{
+    getOneParticipante(setParticipante,pruebaUsabilidad.idPruebaUsabilidad,user.idUsuario)
+  },[])
+
+  useEffect(()=>{
+    if(participante?.consentimiento){
+      getCuestionariosPerfil(setRecordsFiltered,participante?.idPerfil)
+    }
+  },[participante])
+
   return (
     <Grid width={'80%'} m="auto" sx={{mt: 5}}>
-      <Grid container xs={12} justifyContent="flex-start" alignItems="center">
+      <Grid container justifyContent="flex-start" alignItems="center">
         <Grid item>
           <IconButtonTesis disableRipple={true} size="large" sx={{color: "primary.main", display: "block"}} onClick={handleClickRegresar}>
             <ArrowBackIcon/>
@@ -66,7 +70,8 @@ const CuestionariosResponder = () =>{
       </Grid>
       <Grid container justifyContent='space-between' sx={{marginTop: '30px', marginBottom: '10px',backgroundColor: theme.palette.fondo,borderRadius: '15px', padding: '20px'}}>
         {recordsFiltered.map((cuestionario,i) =>
-          <Grid container xs={12} sx={{marginTop: '10px', marginBottom: '10px',backgroundColor: theme.palette.primary.dark, padding: '20px', borderRadius: '15px'}}>
+          <Grid container sx={{marginTop: '10px', marginBottom: '10px',backgroundColor: theme.palette.primary.dark, padding: '10px',
+            paddingLeft: '20px',paddingRight:'20px', borderRadius: '15px'}}>
             <Grid item xs={9}>
               <LabelTesis fontSize="20px" fontWeight="bold">{cuestionario.nombre}</LabelTesis>
             </Grid>
@@ -76,13 +81,20 @@ const CuestionariosResponder = () =>{
               </IconButtonTesis>
             </Grid>
             <Grid item xs={5}>
-              <LabelTesis>{`Perfil del participante: ${cuestionario.perfil}`}</LabelTesis>
+              <LabelTesis>{`Perfil del participante: ${cuestionario.PerfilParticipante?.perfil}`}</LabelTesis>
             </Grid>
             <Grid item xs={4}>
               <LabelTesis>{`Numero de preguntas: ${cuestionario.preguntas}`}</LabelTesis>
             </Grid>
           </Grid>
         )}
+        {recordsFiltered.length === 0 &&
+        <Grid container xs={12} sx={{justifyContent: 'center',marginTop: '10px', marginBottom: '10px',backgroundColor: theme.palette.primary.dark, padding: '20px', borderRadius: '15px'}}>
+          <Grid item xs={5} sx={{alignSelf: 'center',textAlign: 'center'}}>
+            <LabelTesis fontSize="30px" fontWeight="bold">No se definieron cuestionarios</LabelTesis>
+          </Grid>
+        </Grid>
+        }
       </Grid>
     </Grid>
   )

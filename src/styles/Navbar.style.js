@@ -7,7 +7,7 @@ export const StyledNavbar = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 5rem;
+  height: 4rem;
   background-color: ${props => props.theme.palette.primary.main};
   -webkit-touch-callout: none;
   -webkit-user-select: none;

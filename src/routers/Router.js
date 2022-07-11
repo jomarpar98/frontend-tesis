@@ -29,6 +29,9 @@ import OpcionesPruebaUsabilidadAnalisis from "../pages/PruebaUsabilidadAnalisis"
 import ObservacionesRealizadas from "../pages/ObservacionesRealizadas";
 import CuestionariosRealizados from "../pages/CuestionariosRealizados";
 import CuestionarioRealizado from "../pages/CuestionarioRealizado";
+import OpcionesMiembroPruebaUsabilidad from "../pages/PruebaUsabilidadEjecucionMiembro";
+import ParticipantesObservar from "../pages/ParticipantesObservar";
+import VisualizarObservaciones from "../pages/VisualizarObservaciones";
 
 (function() {
   const localUser = JSON.parse(localStorage.getItem('user'))
@@ -113,6 +116,11 @@ const Router = () => {
             <Route exact path="/observaciones-realizadas" component={ObservacionesRealizadas}  />
             <Route exact path="/cuestionarios-realizados" component={CuestionariosRealizados}  />
             <Route exact path="/visualizar-cuestionario-realizado" component={CuestionarioRealizado}  />
+
+            <Route exact path="/ejecucion-miembro-prueba" component={OpcionesMiembroPruebaUsabilidad}  />
+            <Route exact path="/participantes-observar" component={ParticipantesObservar}  />
+
+            <Route exact path="/visualizar-observaciones" component={VisualizarObservaciones}/>
           </Root>
         </Route>
         <Route render={() => <Redirect to="/pruebasUsabilidad"/>}/>

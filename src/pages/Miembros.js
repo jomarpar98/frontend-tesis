@@ -19,6 +19,7 @@ import {UserContext} from "../context/UserContext";
 import {getDisponibles} from "../services/UsuarioService";
 import {createPruebaUsabilidad, updatePruebaUsabilidad} from "../services/PruebaUsabilidadService";
 import CheckboxTesis from "../components/CheckboxTesis";
+import NotificationTesis from "../components/NotificationTesis";
 
 const Miembros = () =>{
   const theme = useTheme()
@@ -35,6 +36,7 @@ const Miembros = () =>{
   const [esNuevo,setEsNuevo] = useState(true);
   const [esInvestigador, setEsInvestigador] = useState(false);
   const [esObservador, setEsObservador] = useState(false);
+  const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
   const [idUsuarioSelected, setIdUsuarioSelected] = useState(null);
   const [fetchMiembros,setFetchMiembros] = useState(false);
 
@@ -56,6 +58,10 @@ const Miembros = () =>{
 
   const handleAgregarMiembro = () => {
     let porAgregar = []
+    setNotify({
+      isOpen: true,
+      message: 'Agregando miembros',
+      type: 'info'})
     miembrosAgregar.map((m)=>{
       let miembro = {
         idPruebaUsabilidad: pruebaUsabilidad.idPruebaUsabilidad,
@@ -65,7 +71,16 @@ const Miembros = () =>{
     })
     setOpenNuevoMiembro(false)
     createMiembros(porAgregar).then(()=>{
+      setNotify({
+        isOpen: true,
+        message: 'Miembro agregado correctamente',
+        type: 'success'})
       setFetchMiembros(!fetchMiembros)
+    }).catch(()=>{
+      setNotify({
+        isOpen: true,
+        message: 'Error al agregar',
+        type: 'error'})
     })
   }
 
@@ -80,8 +95,21 @@ const Miembros = () =>{
   }
 
   const handleDelete = (miembro) =>{
+    setNotify({
+      isOpen: true,
+      message: 'Eliminando miembro',
+      type: 'info'})
     deleteMiembro(pruebaUsabilidad.idPruebaUsabilidad,miembro.idUsuario).then(()=>{
+      setNotify({
+        isOpen: true,
+        message: 'Miembro eliminado correctamente',
+        type: 'success'})
       setFetchMiembros(!fetchMiembros)
+    }).catch(()=>{
+      setNotify({
+        isOpen: true,
+        message: 'Error al eliminar',
+        type: 'error'})
     })
   }
 
@@ -104,6 +132,10 @@ const Miembros = () =>{
       // En caso se use al momento de crear
     }
     else {
+      setNotify({
+        isOpen: true,
+        message: 'Actualizando miembro',
+        type: 'info'})
       let actualizarMiembro = {
         idPruebaUsabilidad: pruebaUsabilidad.idPruebaUsabilidad,
         idUsuario: idUsuarioSelected,
@@ -111,10 +143,19 @@ const Miembros = () =>{
         esInvestigador: esInvestigador,
       }
       updateMiembro(actualizarMiembro).then(()=>{
+        setNotify({
+          isOpen: true,
+          message: 'Miembro actualizado correctamente',
+          type: 'success'})
         getMiembros(setMiembros,pruebaUsabilidad.idPruebaUsabilidad)
         setFetchMiembros(!fetchMiembros)
         setOpenTipos(false)
         setDisable(false)
+      }).catch(()=>{
+        setNotify({
+          isOpen: true,
+          message: 'Error al actualizar',
+          type: 'error'})
       })
     }
   }
@@ -214,6 +255,11 @@ const Miembros = () =>{
           </Grid>
         </Grid>
       </DialogTesis>
+      <NotificationTesis
+        notify={notify}
+        setNotify={setNotify}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      />
     </Grid>
   )
 

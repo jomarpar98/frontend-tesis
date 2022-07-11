@@ -14,13 +14,18 @@ export async function createCuestionario(cuestionario) {
 }
 
 export async function deleteCuestionario(idCuestionario) {
-  axios.delete(`${url}cuestionario/${idCuestionario}`)
+  await axios.delete(`${url}cuestionario/${idCuestionario}`)
 }
 
 export async function updateCuestionario(cuestionario) {
-  axios.put(`${url}cuestionario/${cuestionario.idCuestionario}`,cuestionario,
+  await axios.put(`${url}cuestionario/${cuestionario.idCuestionario}`,cuestionario,
     {headers:{
         'Content-Type': 'application/json',
       }
     })
+}
+
+export async function getCuestionariosPerfil(setCuestionarios,idPerfil) {
+  let cuestionarios = await axios.get(`${url}cuestionario/perfil/${idPerfil}`)
+  setCuestionarios(cuestionarios.data)
 }

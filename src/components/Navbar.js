@@ -14,11 +14,15 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import {PruebaUsabilidadContext} from "../context/PruebaContext";
+import {getMiembro} from "../services/MiembroService";
+import HomeIcon from '@mui/icons-material/Home';
+import IconButtonTesis from "./IconButtonTesis";
 
 const Navbar = ({setSelection}) => {
 
   const { user, setUser } = useContext(UserContext);
   const {pruebaUsabilidad} = useContext(PruebaUsabilidadContext)
+  const [miembro,setMiembro] = useState({})
   const history = useHistory()
   const location = useLocation()
   const theme = useTheme();
@@ -49,6 +53,10 @@ const Navbar = ({setSelection}) => {
     }
   }, [])
 
+  useEffect(()=>{
+    getMiembro(setMiembro,pruebaUsabilidad.idPruebaUsabilidad,user.idUsuario)
+  },[])
+
   const onLogoutSuccess = () => {
     axios.defaults.headers.common['Authorization'] = null
     setUser({});
@@ -65,24 +73,37 @@ const Navbar = ({setSelection}) => {
     onLogoutFailure,
   })
 
+  const logOut = () => {
+    setUser({})
+    history.push('/login')
+  }
+
   return location.pathname==="/login" ? null : (
     <StyledNavbar>
       {hidden &&
-      <div className="nav-items" style={{margin:'auto'}}>
-        {location.pathname !== '/pruebasUsabilidad' && user.idRol === 1 && pruebaUsabilidad.Miembros[0].esInvestigador && navbarItems.map((item) => (!item.roles || (user.idRol && item.roles.includes(user.idRol))) && (
-          <div style={{alignSelf:'center'}} onClick={()=>{item.label === "Ejecución" ? history.push("/comenzar-prueba") : item.label === "Análisis" ? history.push("/analisis-prueba-usabilidad") : history.push("/visualizar-prueba-usabilidad")}}>
-          <NavbarItem
-            key={item.label}
-            label={item.label}
-            menuItems={item.menuItems}
-            rolUsuario={user && user.idRol}
-            setSelection={setSelection}
-          />
+        <>
+          <div style={{marginLeft: '20px'}}>
+            <IconButtonTesis onClick={()=>{history.push("/pruebasUsabilidad")}}>
+              <HomeIcon sx={{color:'white'}} />
+            </IconButtonTesis>
           </div>
-        ))}
-      </div>
+          <div className="nav-items" style={{margin:'auto'}}>
+            {location.pathname !== '/pruebasUsabilidad' && user.idRol === 1 && miembro.esInvestigador===1 && navbarItems.map((item) => (!item.roles || (user.idRol && item.roles.includes(user.idRol))) && (
+              <div style={{alignSelf:'center'}} onClick={()=>{item.label === "Ejecución" ? history.push("/ejecucion-miembro-prueba") : item.label === "Análisis" ? history.push("/analisis-prueba-usabilidad") : history.push("/visualizar-prueba-usabilidad")}}>
+              <NavbarItem
+                key={item.label}
+                label={item.label}
+                menuItems={item.menuItems}
+                rolUsuario={user && user.idRol}
+                setSelection={setSelection}
+              />
+              </div>
+            ))}
+          </div>
+        </>
       }
-      {!!user && !!user.accessToken ?
+      {/*{!!user && !!user.accessToken ?*/}
+      {!!user && !!user.idUsuario?
         <>
           <UserPhoto user={user} onClick={handleClick}/>
         </>
@@ -100,7 +121,7 @@ const Navbar = ({setSelection}) => {
         onClose={handleClose}
         sx={menuStyle}
       >
-        <MenuItem onClick={()=>{handleClose();signOut()}}>
+        <MenuItem onClick={()=>{handleClose();logOut()}}>
           <ListItemIcon>
             <LogoutIcon />
           </ListItemIcon>

@@ -24,6 +24,7 @@ import {
   getParticipantes,
   updateParticipantes
 } from "../services/ParticipanteService";
+import NotificationTesis from "../components/NotificationTesis";
 
 const Participantes = () =>{
   const theme = useTheme()
@@ -49,6 +50,7 @@ const Participantes = () =>{
   const [consentimiento,setConsentimiento] = useState(false);
   const [perfilSeleccionado,setPerfilSeleccionado] = useState("noPerfiles")
   const [observadorSeleccionado,setObservadorSeleccionado] = useState("noObservador")
+  const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
 
   const [fetchPerfiles,setFetchPerfiles] = useState(false);
 
@@ -94,7 +96,7 @@ const Participantes = () =>{
       setApMaterno(participante.Usuario.apMaterno)
       setApPaterno(participante.Usuario.apPaterno)
       setEmail(participante.Usuario.email)
-      setConsentimiento(participante.concentimiento)
+      setConsentimiento(participante.consentimiento)
       setPerfilSeleccionado(participante.PerfilParticipante.idPerfilParticipante)
       setObservadorSeleccionado(participante.Observador.idUsuario)
       setIdSelectParticipante(participante.idUsuario)
@@ -129,13 +131,41 @@ const Participantes = () =>{
 
   const handleGuardarPerfil = () => {
     if(esNuevoPerfil){
+      setNotify({
+        isOpen: true,
+        message: 'Creando perfil',
+        type: 'info'})
       createPerfil(pruebaUsabilidad.idPruebaUsabilidad,nombrePerfil).then(()=>{
+        setNotify({
+          isOpen: true,
+          message: 'Perfil creado correctamente',
+          type: 'success'})
         setFetchPerfiles(!fetchPerfiles)
+        getPerfiles(pruebaUsabilidad.idPruebaUsabilidad,setRecordsFiltered)
+        getPerfiles(pruebaUsabilidad.idPruebaUsabilidad,setPerfiles)
+      }).catch(()=>{
+        setNotify({
+          isOpen: true,
+          message: 'Error al crear',
+          type: 'error'})
       })
     }
     else {
+      setNotify({
+        isOpen: true,
+        message: 'Actualizando perfil',
+        type: 'info'})
       updatePerfil(pruebaUsabilidad.idPruebaUsabilidad,nombrePerfil,idSelect).then(()=>{
+        setNotify({
+          isOpen: true,
+          message: 'Perfil actualizado correctamente',
+          type: 'success'})
         setFetchPerfiles(!fetchPerfiles)
+      }).catch(()=>{
+        setNotify({
+          isOpen: true,
+          message: 'Error al actualizar',
+          type: 'error'})
       })
     }
     setOpenNuevoPerfil(false)
@@ -147,36 +177,86 @@ const Participantes = () =>{
       apPaterno: apPaterno,
       apMaterno: apMaterno,
       email: email,
-      concentimiento: consentimiento,
+      consentimiento: consentimiento,
       idPruebaUsabilidad: pruebaUsabilidad.idPruebaUsabilidad,
       idPerfil: perfilSeleccionado,
       idObservador: observadorSeleccionado,
     }
     if(idSelectParticipante !== null) {participante.idUsuario = idSelectParticipante}
     if(esNuevoParticipante){
+      setNotify({
+        isOpen: true,
+        message: 'Creando participante',
+        type: 'info'})
       createParticipante(participante).then(()=>{
+        setNotify({
+          isOpen: true,
+          message: 'Participante creado correctamente',
+          type: 'success'})
         setFetchPerfiles(!fetchPerfiles)
+      }).catch(()=>{
+        setNotify({
+          isOpen: true,
+          message: 'Error al crear',
+          type: 'error'})
       })
     }
     else {
+      setNotify({
+        isOpen: true,
+        message: 'Actualizando participante',
+        type: 'info'})
       updateParticipantes(participante).then(()=>{
-        setTimeout(()=>{
+          setNotify({
+            isOpen: true,
+            message: 'Participante actualizado correctamente',
+            type: 'success'})
           setFetchPerfiles(!fetchPerfiles)
-        },1500)
+      }).catch(()=>{
+        setNotify({
+          isOpen: true,
+          message: 'Error al actualizar',
+          type: 'error'})
       })
     }
     setOpenNuevoParticipante(false)
   }
 
   const handleDeletePerfil = (idPerfil) => {
+    setNotify({
+      isOpen: true,
+      message: 'Eliminando perfil',
+      type: 'info'})
     deletePerfil(idPerfil).then(()=>{
+      setNotify({
+        isOpen: true,
+        message: 'Perfil eliminado correctamente',
+        type: 'success'})
       setFetchPerfiles(!fetchPerfiles)
+    }).catch(()=>{
+      setNotify({
+        isOpen: true,
+        message: 'Error al eliminar',
+        type: 'error'})
     })
   }
 
   const handleDeleteParticipante = (idUsuario) => {
+    setNotify({
+      isOpen: true,
+      message: 'Eliminando participante',
+      type: 'info'})
     deleteParticipante(pruebaUsabilidad.idPruebaUsabilidad,idUsuario).then(()=>{
+      setNotify({
+        isOpen: true,
+        message: 'Perfil eliminado correctamente',
+        type: 'success'})
       setFetchPerfiles(!fetchPerfiles)
+    }).catch(()=>{
+      setNotify({
+        isOpen: true,
+        message: 'Error al eliminar',
+        type: 'error'})
     })
   }
 
@@ -252,19 +332,7 @@ const Participantes = () =>{
         </Grid>
         <Grid xs={12} sx={{pt: 3}}>
           <DataGridTesis
-            rows={ recordsFiltered.length!==0 ? recordsFiltered :[{
-              perfil: 'Alumnos de la PUCP',
-              cantidadParticipantes: 1,
-              idPerfilParticipante: 1,
-              id: 1
-            },
-              {
-                perfil: 'Alumnos de la UPC',
-                cantidadParticipantes: 0,
-                idPerfilParticipante: 2,
-                id: 2
-              }
-            ]}
+            rows={ recordsFiltered.length!==0 ? recordsFiltered :[]}
             columns={ColumnsPerfiles(handleOpenNuevoPerfil,handleDeletePerfil)}
             pageSize={5}
             disableSelectionOnClick
@@ -356,6 +424,11 @@ const Participantes = () =>{
           </Grid>
         </Grid>
       </DialogTesis>
+      <NotificationTesis
+        notify={notify}
+        setNotify={setNotify}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      />
     </Grid>
   )
 

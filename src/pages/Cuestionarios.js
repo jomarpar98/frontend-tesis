@@ -23,6 +23,7 @@ import {
   getCuestionarios,
   updateCuestionario
 } from "../services/CuestionarioService";
+import NotificationTesis from "../components/NotificationTesis";
 
 const Cuestionarios = () =>{
   const theme = useTheme()
@@ -37,6 +38,7 @@ const Cuestionarios = () =>{
   const [perfilSeleccionado, setPerfilSeleccionado] = useState("noPerfiles");
   const [idSeleccionado,setIdSeleccionado] = useState(null);
   const [fetch,setFetch] = useState(false);
+  const [notify, setNotify] = useState({isOpen: false, message: '', type: ''})
 
   const handleClickRegresar = () =>{
     history.push("/visualizar-prueba-usabilidad");
@@ -50,12 +52,13 @@ const Cuestionarios = () =>{
     setOpenNuevoCuestionario(false);
   }
 
-  const handleOpen = (nuevo,cuestionario = {}) => {
+  const handleOpen = (nuevo,cuestionario = {},e) => {
     setEsNuevo(nuevo)
     if (nuevo) {
       setNombreCuestionario('')
       setPerfilSeleccionado(perfiles.length > 0 ? perfiles[0].idPerfilParticipante:"noPerfiles")
     } else {
+      e.stopPropagation()
       setIdSeleccionado(cuestionario.idCuestionario)
       setNombreCuestionario(cuestionario.nombre)
       setPerfilSeleccionado(cuestionario.idPerfil)
@@ -63,9 +66,23 @@ const Cuestionarios = () =>{
     setOpenNuevoCuestionario(true);
   }
 
-  const handleDelete = (cuestionario) => {
+  const handleDelete = (cuestionario,e) => {
+    e.stopPropagation()
+    setNotify({
+      isOpen: true,
+      message: 'Eliminando cuestionario',
+      type: 'info'})
     deleteCuestionario(cuestionario.idCuestionario).then(()=>{
+      setNotify({
+        isOpen: true,
+        message: 'Cuestionario eliminado correctamente',
+        type: 'success'})
       setFetch(!fetch)
+    }).catch(()=>{
+      setNotify({
+        isOpen: true,
+        message: 'Error al eliminar',
+        type: 'error'})
     })
   }
 
@@ -80,8 +97,8 @@ const Cuestionarios = () =>{
     });
   }
 
-  const handleAdd = () => {
-    handleOpen(true)
+  const handleAdd = (e) => {
+    handleOpen(true,e)
   }
 
   const handleGuardar = () => {
@@ -94,14 +111,40 @@ const Cuestionarios = () =>{
     }
     if(idSeleccionado !== null) {cuestionario.idCuestionario = idSeleccionado}
     if (esNuevo) {
+      setNotify({
+        isOpen: true,
+        message: 'Creando cuestionario',
+        type: 'info'})
       createCuestionario(cuestionario).then(()=>{
+        setNotify({
+          isOpen: true,
+          message: 'Cuestionario creado correctamente',
+          type: 'success'})
         setDisable(false)
         setFetch(!fetch)
+      }).catch(()=>{
+        setNotify({
+          isOpen: true,
+          message: 'Error al crear',
+          type: 'error'})
       })
     } else {
+      setNotify({
+        isOpen: true,
+        message: 'Actualizando cuestionario',
+        type: 'info'})
       updateCuestionario(cuestionario).then(()=>{
+        setNotify({
+          isOpen: true,
+          message: 'Cuestionario actualizado correctamente',
+          type: 'success'})
         setDisable(false)
         setFetch(!fetch)
+      }).catch(()=>{
+        setNotify({
+          isOpen: true,
+          message: 'Error al actualizar',
+          type: 'error'})
       })
     }
     setOpenNuevoCuestionario(false)
@@ -132,23 +175,19 @@ const Cuestionarios = () =>{
       </Grid>
       <Grid container justifyContent='space-between' sx={{marginTop: '30px', marginBottom: '10px',backgroundColor: theme.palette.fondo,borderRadius: '15px', padding: '20px'}}>
         {recordsFiltered.map((cuestionario,i) =>
-          <Grid container xs={12} sx={{marginTop: '10px', marginBottom: '10px',backgroundColor: theme.palette.primary.dark, padding: '20px', borderRadius: '15px'}}>
-            <Grid item xs={9}>
+          <Grid container onClick={()=>handleNext(cuestionario)} xs={12} sx={{marginTop: '10px', marginBottom: '10px',backgroundColor: theme.palette.primary.dark, padding: '10px',
+            paddingLeft: '20px',paddingRight:'20px',borderRadius: '15px'}}>
+            <Grid item xs={10}>
               <LabelTesis fontSize="20px" fontWeight="bold">{cuestionario.nombre}</LabelTesis>
             </Grid>
             <Grid item xs={1}>
-              <IconButtonTesis onClick={()=>handleOpen(false,cuestionario)}>
+              <IconButtonTesis onClick={(e)=>handleOpen(false,cuestionario,e)}>
                 <EditIcon/>
                 </IconButtonTesis>
             </Grid>
             <Grid item xs={1}>
-              <IconButtonTesis onClick={()=>handleDelete(cuestionario)}>
+              <IconButtonTesis onClick={(e)=>handleDelete(cuestionario,e)}>
                 <DeleteForeverIcon/>
-              </IconButtonTesis>
-            </Grid>
-            <Grid item xs={1}>
-              <IconButtonTesis onClick={()=>handleNext(cuestionario)}>
-                <NavigateNextIcon/>
               </IconButtonTesis>
             </Grid>
             <Grid item xs={5}>
@@ -200,6 +239,11 @@ const Cuestionarios = () =>{
           </Grid>
         </Grid>
       </DialogTesis>
+      <NotificationTesis
+        notify={notify}
+        setNotify={setNotify}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      />
     </Grid>
   )
 
