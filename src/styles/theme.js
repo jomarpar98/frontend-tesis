@@ -13,9 +13,13 @@ const theme =createTheme(
     },
     palette:{
       primary: {
-        main:"#26A69A",
-        dark:"#4CAF50",
+        main:"#17A2B8",
+        dark:"#69C3D1",
       },
+      navColor: "#009892",
+      casillas: "#F5FFE3",
+      button: "#17A2B8",
+      hover: "#69C3D1",
       white: "#FFFFFF",
       black: "#000000",
       fondo: "#ECECEC",

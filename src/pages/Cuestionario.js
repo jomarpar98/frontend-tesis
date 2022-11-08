@@ -127,7 +127,7 @@ const Cuestionario = (props) => {
         {preguntas.map((p,i)=>
           <>
           <Grid container xs={12} sx={{marginTop: '10px',marginBottom: p.idTipoPregunta === 0 ? '10px':'0px' ,
-            backgroundColor: theme.palette.primary.dark, padding: '10px',
+            backgroundColor: theme.palette.casillas, padding: '10px',
             paddingLeft: '20px',paddingRight:'20px', borderRadius: '15px',
             borderBottomLeftRadius:p.idTipoPregunta === 0 ? '15px':'0',borderBottomRightRadius:p.idTipoPregunta === 0 ? '15px':'0'}}>
             <Grid item xs={9} sx={{alignSelf: 'center'}}>
@@ -177,7 +177,7 @@ const Cuestionario = (props) => {
           </>
         )}
         {preguntas.length === 0 &&
-        <Grid container xs={12} sx={{justifyContent: 'center',marginTop: '10px', marginBottom: '10px',backgroundColor: theme.palette.primary.dark, padding: '20px', borderRadius: '15px'}}>
+        <Grid container xs={12} sx={{justifyContent: 'center',marginTop: '10px', marginBottom: '10px',backgroundColor: theme.palette.casillas, padding: '20px', borderRadius: '15px'}}>
           <Grid item xs={5} sx={{alignSelf: 'center',textAlign: 'center'}}>
             <LabelTesis fontSize="30px" fontWeight="bold">Cree una pregunta</LabelTesis>
           </Grid>

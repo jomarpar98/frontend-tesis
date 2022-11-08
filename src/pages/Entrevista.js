@@ -80,7 +80,7 @@ const Entrevista = () =>{
       </Grid>
       <Grid container justifyContent='space-between' sx={{marginTop: '30px', marginBottom: '10px',backgroundColor: theme.palette.fondo,borderRadius: '15px', padding: '20px'}}>
         {preguntas.map((p,i)=>
-          <Grid container xs={12} sx={{marginTop: '10px', marginBottom: '10px',backgroundColor: theme.palette.primary.dark, padding: '10px',
+          <Grid container xs={12} sx={{marginTop: '10px', marginBottom: '10px',backgroundColor: theme.palette.casillas, padding: '10px',
             paddingLeft: '20px',paddingRight:'20px', borderRadius: '15px'}}>
             <Grid item xs={9} sx={{alignSelf: 'center'}}>
               <LabelTesis fontSize="20px" fontWeight="bold">{`Pregunta ${i+1}:`}</LabelTesis>
@@ -102,7 +102,7 @@ const Entrevista = () =>{
           </Grid>
         )}
         {preguntas.length === 0 &&
-        <Grid container xs={12} sx={{justifyContent: 'center',marginTop: '10px', marginBottom: '10px',backgroundColor: theme.palette.primary.dark, padding: '20px', borderRadius: '15px'}}>
+        <Grid container xs={12} sx={{justifyContent: 'center',marginTop: '10px', marginBottom: '10px',backgroundColor: theme.palette.casillas, padding: '20px', borderRadius: '15px'}}>
           <Grid item xs={5} sx={{alignSelf: 'center',textAlign: 'center'}}>
             <LabelTesis fontSize="30px" fontWeight="bold">Cree una pregunta</LabelTesis>
           </Grid>

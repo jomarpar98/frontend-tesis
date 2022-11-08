@@ -131,34 +131,34 @@ const OpcionesPruebaUsabilidad = () => {
       <Grid container spacing={2} sx={{pt:2}}>
         {user.idRol ===1 &&
         <Grid item xs={4} sx={{marginTop: '10px', marginBottom: '10px', padding: '20px'}}>
-          <div style={{cursor:'pointer' ,backgroundColor: theme.palette.primary.dark,borderRadius: '15px',
-            paddingTop: '50px', paddingLeft: '20px',height: '100px'}} onClick={()=>handleClickMiembros()}>
+          <div style={{cursor:'pointer' ,backgroundColor: theme.palette.casillas,borderRadius: '15px',
+            paddingTop: '50px', paddingLeft: '20px',height: '100px', borderStyle: 'solid'}} onClick={()=>handleClickMiembros()}>
             <LabelTesis fontSize={"18px"} >Miembros de la prueba</LabelTesis>
           </div>
         </Grid>}
         {user.idRol ===1 &&
         <Grid item xs={4} sx={{marginTop: '10px', marginBottom: '10px', padding: '20px'}}>
-          <div style={{cursor:'pointer' ,backgroundColor: theme.palette.primary.dark,borderRadius: '15px',
-            paddingTop: '50px', paddingLeft: '20px',height: '100px'}} onClick={()=>handleClickParticipantes()}>
+          <div style={{cursor:'pointer' ,backgroundColor: theme.palette.casillas,borderRadius: '15px',
+            paddingTop: '50px', paddingLeft: '20px',height: '100px', borderStyle: 'solid'}} onClick={()=>handleClickParticipantes()}>
             <LabelTesis fontSize={"18px"} >Participantes</LabelTesis>
           </div>
         </Grid>}
         <Grid item xs={user.idRol === 1 ? 4: 6} sx={{marginTop: '10px', marginBottom: '10px', padding: '20px'}}>
-          <div style={{cursor:'pointer' ,backgroundColor: theme.palette.primary.dark,borderRadius: '15px',
-            paddingTop: '50px', paddingLeft: '20px',height: '100px'}} onClick={()=>handleClickCuestionarios()}>
+          <div style={{cursor:'pointer' ,backgroundColor: theme.palette.casillas,borderRadius: '15px',
+            paddingTop: '50px', paddingLeft: '20px',height: '100px', borderStyle: 'solid'}} onClick={()=>handleClickCuestionarios()}>
             <LabelTesis fontSize={"18px"} >Cuestionarios</LabelTesis>
           </div>
         </Grid>
         <Grid item xs={6} sx={{marginTop: '10px', marginBottom: '10px', padding: '20px'}}>
-          <div style={{cursor:'pointer' ,backgroundColor: theme.palette.primary.dark,borderRadius: '15px',
-            paddingTop: '50px', paddingLeft: '20px',height: '100px'}} onClick={()=>handleClickTareas()}>
+          <div style={{cursor:'pointer' ,backgroundColor: theme.palette.casillas,borderRadius: '15px',
+            paddingTop: '50px', paddingLeft: '20px',height: '100px', borderStyle: 'solid'}} onClick={()=>handleClickTareas()}>
             <LabelTesis fontSize={"18px"} >{user.idRol ===3 ? "Tareas a realizar" : "Tareas"}</LabelTesis>
           </div>
         </Grid>
         {user.idRol ===1 &&
         <Grid item xs={6} sx={{marginTop: '10px', marginBottom: '10px', padding: '20px'}}>
-          <div style={{cursor:'pointer' ,backgroundColor: theme.palette.primary.dark,borderRadius: '15px',
-            paddingTop: '50px', paddingLeft: '20px',height: '100px'}} onClick={()=>handleClickEntrevista()}>
+          <div style={{cursor:'pointer' ,backgroundColor: theme.palette.casillas,borderRadius: '15px',
+            paddingTop: '50px', paddingLeft: '20px',height: '100px', borderStyle: 'solid'}} onClick={()=>handleClickEntrevista()}>
             <LabelTesis fontSize={"18px"} >Estructura de entrevista</LabelTesis>
           </div>
         </Grid>}

@@ -56,14 +56,14 @@ const OpcionesMiembroPruebaUsabilidad = () => {
       <Grid container spacing={2} sx={{pt:2}}>
         {(miembro.esInvestigador === 1) &&
         <Grid item xs={6} sx={{marginTop: '10px', marginBottom: '10px', padding: '20px'}}>
-          <div style={{cursor:'pointer' ,backgroundColor: theme.palette.primary.dark,borderRadius: '15px',
-            paddingTop: '50px', paddingLeft: '20px',height: '100px'}} onClick={()=>handleClickComenzar()}>
+          <div style={{cursor:'pointer' ,backgroundColor: theme.palette.casillas,borderRadius: '15px',
+            paddingTop: '50px', paddingLeft: '20px',height: '100px', borderStyle: 'solid'}} onClick={()=>handleClickComenzar()}>
             <LabelTesis fontSize={"18px"} >Comenzar prueba</LabelTesis>
           </div>
         </Grid>}
         {(miembro.esObservador === 1) && <Grid item xs={6} sx={{marginTop: '10px', marginBottom: '10px', padding: '20px'}}>
-          <div style={{cursor:'pointer' ,backgroundColor: theme.palette.primary.dark,borderRadius: '15px',
-            paddingTop: '50px', paddingLeft: '20px',height: '100px'}} onClick={()=>handleClickObservaciones()}>
+          <div style={{cursor:'pointer' ,backgroundColor: theme.palette.casillas,borderRadius: '15px',
+            paddingTop: '50px', paddingLeft: '20px',height: '100px', borderStyle: 'solid'}} onClick={()=>handleClickObservaciones()}>
             <LabelTesis fontSize={"18px"} >Ficha de observación</LabelTesis>
           </div>
         </Grid>}

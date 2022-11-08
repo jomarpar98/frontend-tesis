@@ -115,7 +115,7 @@ const CuestionarioResponder = (props) => {
         {preguntasAux.map((p,i)=>
           <>
             <Grid container xs={12} sx={{marginTop: '10px',marginBottom: '0px' ,
-              backgroundColor: theme.palette.primary.dark, padding: '10px',
+              backgroundColor: theme.palette.casillas, padding: '10px',
               paddingLeft: '20px',paddingRight:'20px', borderRadius: '15px',
               borderBottomLeftRadius:'0',borderBottomRightRadius:'0'}}>
               <Grid item xs={12} sx={{alignSelf: 'center'}}>
@@ -160,7 +160,7 @@ const CuestionarioResponder = (props) => {
           </>
         )}
         {preguntasAux.length === 0 ?
-        <Grid container xs={12} sx={{justifyContent: 'center',marginTop: '10px', marginBottom: '10px',backgroundColor: theme.palette.primary.dark, padding: '20px', borderRadius: '15px'}}>
+        <Grid container xs={12} sx={{justifyContent: 'center',marginTop: '10px', marginBottom: '10px',backgroundColor: theme.palette.casillas, padding: '20px', borderRadius: '15px'}}>
           <Grid item xs={5} sx={{alignSelf: 'center',textAlign: 'center'}}>
             <LabelTesis fontSize="30px" fontWeight="bold">No se definieron preguntas</LabelTesis>
           </Grid>

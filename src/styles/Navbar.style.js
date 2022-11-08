@@ -8,7 +8,7 @@ export const StyledNavbar = styled.div`
   align-items: center;
   justify-content: space-between;
   height: 4rem;
-  background-color: ${props => props.theme.palette.primary.main};
+  background-color: ${props => props.theme.palette.navColor};
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -102,7 +102,7 @@ export const StyledNavbarItem = styled.div`
   transition: background-color .3s ease;
 
   &:hover {
-    background-color: ${props => props.theme.palette.primary.dark};
+    background-color: ${props => props.theme.palette.button};
     cursor: pointer;
   }
 
@@ -165,7 +165,7 @@ export const menuStyle = {
   filter:'drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.25))',
   '& .MuiPaper-root': {
     width:200,
-    backgroundColor: 'primary.main',
+    backgroundColor: 'navColor',
   },
   '& .MuiMenuItem-root': {
     color:'white',

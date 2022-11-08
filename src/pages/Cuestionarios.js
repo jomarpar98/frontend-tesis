@@ -175,7 +175,7 @@ const Cuestionarios = () =>{
       </Grid>
       <Grid container justifyContent='space-between' sx={{marginTop: '30px', marginBottom: '10px',backgroundColor: theme.palette.fondo,borderRadius: '15px', padding: '20px'}}>
         {recordsFiltered.map((cuestionario,i) =>
-          <Grid container onClick={()=>handleNext(cuestionario)} xs={12} sx={{marginTop: '10px', marginBottom: '10px',backgroundColor: theme.palette.primary.dark, padding: '10px',
+          <Grid container onClick={()=>handleNext(cuestionario)} xs={12} sx={{marginTop: '10px', marginBottom: '10px',backgroundColor: theme.palette.casillas, padding: '10px',
             paddingLeft: '20px',paddingRight:'20px',borderRadius: '15px'}}>
             <Grid item xs={10}>
               <LabelTesis fontSize="20px" fontWeight="bold">{cuestionario.nombre}</LabelTesis>
@@ -199,7 +199,7 @@ const Cuestionarios = () =>{
           </Grid>
         )}
         {recordsFiltered.length === 0 &&
-          <Grid container xs={12} sx={{justifyContent: 'center',marginTop: '10px', marginBottom: '10px',backgroundColor: theme.palette.primary.dark, padding: '20px', borderRadius: '15px'}}>
+          <Grid container xs={12} sx={{justifyContent: 'center',marginTop: '10px', marginBottom: '10px',backgroundColor: theme.palette.casillas, padding: '20px', borderRadius: '15px'}}>
             <Grid item xs={5} sx={{alignSelf: 'center',textAlign: 'center'}}>
               <LabelTesis fontSize="30px" fontWeight="bold">Cree un cuestionario</LabelTesis>
             </Grid>

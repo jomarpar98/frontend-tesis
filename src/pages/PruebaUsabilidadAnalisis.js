@@ -106,14 +106,14 @@ const OpcionesPruebaUsabilidadAnalisis = () => {
       </Grid>
       <Grid container spacing={2} sx={{pt:2}}>
         <Grid item xs={6} sx={{marginTop: '10px', marginBottom: '10px', padding: '20px'}}>
-          <div style={{cursor:'pointer' ,backgroundColor: theme.palette.primary.dark,borderRadius: '15px',
-            paddingTop: '50px', paddingLeft: '20px',height: '100px'}} onClick={()=>handleClickObservaciones()}>
+          <div style={{cursor:'pointer' ,backgroundColor: theme.palette.casillas,borderRadius: '15px',
+            paddingTop: '50px', paddingLeft: '20px',height: '100px', borderStyle: 'solid'}} onClick={()=>handleClickObservaciones()}>
             <LabelTesis fontSize={"18px"} >Observaciones realizadas</LabelTesis>
           </div>
         </Grid>
         <Grid item xs={6} sx={{marginTop: '10px', marginBottom: '10px', padding: '20px'}}>
-          <div style={{cursor:'pointer' ,backgroundColor: theme.palette.primary.dark,borderRadius: '15px',
-            paddingTop: '50px', paddingLeft: '20px',height: '100px'}} onClick={()=>handleClickCuestionarios()}>
+          <div style={{cursor:'pointer' ,backgroundColor: theme.palette.casillas,borderRadius: '15px',
+            paddingTop: '50px', paddingLeft: '20px',height: '100px', borderStyle: 'solid'}} onClick={()=>handleClickCuestionarios()}>
             <LabelTesis fontSize={"18px"} >Cuestionarios realizados</LabelTesis>
           </div>
         </Grid>

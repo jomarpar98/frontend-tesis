@@ -50,7 +50,7 @@ const VisaulizarObservaciones = (props) =>{
       <Grid container justifyContent='space-between' sx={{marginTop: '30px', backgroundColor: theme.palette.fondo,borderRadius: '15px', padding: '20px'}}>
         {tareas.map((t,i)=>
           <>
-            <Grid container xs={12} sx={{marginTop: '10px',backgroundColor: theme.palette.primary.dark, padding: '10px',
+            <Grid container xs={12} sx={{marginTop: '10px',backgroundColor: theme.palette.casillas, padding: '10px',
               paddingLeft: '20px',paddingRight:'20px', borderRadius: '15px'
               ,borderBottomLeftRadius: '0px',borderBottomRightRadius: '0px'}}>
               <Grid item xs={12} sx={{alignSelf: 'center'}}>
@@ -74,7 +74,7 @@ const VisaulizarObservaciones = (props) =>{
           </>
         )}
         {tareas.length === 0 &&
-          <Grid container xs={12} sx={{justifyContent: 'center',marginTop: '10px', marginBottom: '10px',backgroundColor: theme.palette.primary.dark, padding: '20px', borderRadius: '15px'}}>
+          <Grid container xs={12} sx={{justifyContent: 'center',marginTop: '10px', marginBottom: '10px',backgroundColor: theme.palette.casillas, padding: '20px', borderRadius: '15px'}}>
             <Grid item xs={5} sx={{alignSelf: 'center',textAlign: 'center'}}>
               <LabelTesis fontSize="30px" fontWeight="bold">No se definieron tareas</LabelTesis>
             </Grid>

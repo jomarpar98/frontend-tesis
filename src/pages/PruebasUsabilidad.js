@@ -197,7 +197,7 @@ const PruebasUsabilidad = () => {
       </Grid>
       <Grid container justifyContent='space-between' sx={{marginTop: '30px', marginBottom: '10px',backgroundColor: theme.palette.fondo,borderRadius: '15px', padding: '20px'}}>
         {recordsFiltered.map((prueba,i) =>
-          <Grid onClick={()=>handleNext(prueba)} container xs={12} sx={{marginTop: '10px', marginBottom: '10px',backgroundColor: theme.palette.primary.dark, padding: '10px',
+          <Grid onClick={()=>handleNext(prueba)} container xs={12} sx={{marginTop: '10px', marginBottom: '10px',backgroundColor: theme.palette.casillas, padding: '10px',
             paddingLeft: '20px',paddingRight:'20px', borderRadius: '15px'}}>
             <Grid item xs={user.idRol === 1 ? 10:12}>
               <LabelTesis fontSize="20px" fontWeight="bold">{prueba.nombre}</LabelTesis>
@@ -228,7 +228,7 @@ const PruebasUsabilidad = () => {
           </Grid>
         )}
         {recordsFiltered.length === 0 &&
-        <Grid container xs={12} sx={{marginTop: '10px', marginBottom: '10px',backgroundColor: theme.palette.primary.dark, padding: '20px', borderRadius: '15px',justifyContent: 'center'}}>
+        <Grid container xs={12} sx={{marginTop: '10px', marginBottom: '10px',backgroundColor: theme.palette.casillas, padding: '20px', borderRadius: '15px',justifyContent: 'center'}}>
           <LabelTesis fontSize="30px" fontWeight="bold">No se encuentra ninguna prueba</LabelTesis>
         </Grid>}
       </Grid>
